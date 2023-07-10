@@ -25,6 +25,12 @@ ENV HOME="/home/python"
 
 ENV PATH="$PATH:$HOME/.local/bin"
 
+# requirements
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
 # Ports and run
 
 EXPOSE 8000
