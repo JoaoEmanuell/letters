@@ -10,7 +10,7 @@ def generate_hash(value: str) -> str:
     return hashed.decode(ENCODE)
 
 
-def compare_hash(valeu: str, hash: str) -> bool:
+def compare_hash(value: str, hash: str) -> bool:
     global ENCODE
     if type(hash) != bytes:
         hash = bytes(hash, encoding=ENCODE)
