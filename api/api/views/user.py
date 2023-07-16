@@ -14,11 +14,11 @@ from rest_framework.status import (
 from .serializers import UserSerializer
 from ..models import User
 
-from main.utils import generate_hash
+from main.utils import generate_hash, compare_hash
 
 
 class UserListApiView(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):  # Get all users, some staff
         if request.user.is_staff:
             users = User.objects.all()
             serializer = UserSerializer(users, many=True)
@@ -28,7 +28,7 @@ class UserListApiView(APIView):
             status=HTTP_401_UNAUTHORIZED,
         )
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):  # Register user
         token = generate_hash(f"{randint(1, 100000000)}{date.today()}")
         token = token.replace("/", "").replace(".", "")
         data = {
@@ -107,3 +107,30 @@ class UserDetailApiView(APIView):
         user_instance.delete()
 
         return Response({"res": "User deleted!"}, status=HTTP_200_OK)
+
+
+class UserLoginApiView(APIView):
+    def __get_object(self, username: str) -> Union[User, None]:
+        try:
+            return User.objects.get(username=username)
+        except User.DoesNotExist:
+            return None
+
+    def __user_dont_exists(self) -> Response:
+        return Response({"res": "User don't exists"}, status=HTTP_400_BAD_REQUEST)
+
+    def post(self, request, *args, **kwargs) -> Response:
+        data = {
+            "username": request.data.get("username"),
+            "password": request.data.get("password"),
+        }
+
+        user_instance = self.__get_object(data["username"])
+        if not user_instance:
+            return self.__user_dont_exists()
+
+        # Validate password
+        if compare_hash(data["password"], user_instance.password):
+            return Response({"res": user_instance.token}, status=HTTP_200_OK)
+
+        return Response({"res": "Invalid password"}, status=HTTP_400_BAD_REQUEST)
