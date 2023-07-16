@@ -1,14 +1,14 @@
 from rest_framework import serializers
-from .models import UserModel, LetterModel
+from ..models import User, Letter
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserModel
+        model = User
         fields = ["name", "username", "password", "token"]
 
 
 class LetterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LetterModel
+        model = Letter
         fields = ["user_token", "date", "text_path", "sender"]

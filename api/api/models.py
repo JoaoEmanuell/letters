@@ -7,7 +7,7 @@ from encrypted_fields import fields
 from main.settings import FIELD_ENCRYPTION_KEYS
 
 
-class UserModel(models.Model):
+class User(models.Model):
     _name_data = fields.EncryptedTextField(max_length=100, default="", null=False)
     name = fields.SearchField(
         hash_key=FIELD_ENCRYPTION_KEYS[0], encrypted_field_name="_name_data"
@@ -39,7 +39,7 @@ class UserModel(models.Model):
         verbose_name_plural = "users"
 
 
-class LetterModel(models.Model):
+class Letter(models.Model):
     _user_token_data = fields.EncryptedTextField(max_length=100, default="", null=False)
     user_token = fields.SearchField(
         hash_key=FIELD_ENCRYPTION_KEYS[4], encrypted_field_name="_user_token_data"

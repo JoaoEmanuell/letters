@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import UserModel, LetterModel
+from .models import User, Letter
 
-admin.site.register(UserModel)
-admin.site.register(LetterModel)
+admin.site.register(User)
+admin.site.register(Letter)
