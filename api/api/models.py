@@ -2,20 +2,63 @@ from django.db import models
 
 # Create your models here.
 
+from encrypted_fields import fields
+
+from main.settings import FIELD_ENCRYPTION_KEYS
+
 
 class UserModel(models.Model):
-    name = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
+    _name_data = fields.EncryptedTextField(max_length=100, default="", null=False)
+    name = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[0], encrypted_field_name="_name_data"
+    )
+
+    _username_data = fields.EncryptedTextField(max_length=50, default="", null=False)
+    username = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[1],
+        encrypted_field_name="_username_data",
+        unique=True,
+    )
+
+    _password_data = fields.EncryptedTextField(max_length=100, default="", null=False)
+    password = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[2],
+        encrypted_field_name="_password_data",
+    )  # hash
+
+    _token_data = fields.EncryptedTextField(
+        max_length=100, blank=True, default="", null=True
+    )
+    token = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[3],
+        encrypted_field_name="_token_data",
+        unique=True,
+    )
 
     class Meta:
         verbose_name_plural = "users"
 
 
 class LetterModel(models.Model):
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
-    date = models.DateField()
-    text = models.CharField(max_length=5000)
-    sender = models.CharField(max_length=100)
+    _user_token_data = fields.EncryptedTextField(max_length=100, default="", null=False)
+    user_token = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[4], encrypted_field_name="_user_token_data"
+    )
+
+    _date_data = fields.EncryptedDateField(max_length=100, auto_now=True, null=False)
+    date = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[5], encrypted_field_name="_date_data"
+    )
+
+    _text_path_data = fields.EncryptedTextField(max_length=100, default="", null=False)
+    text_path = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[6], encrypted_field_name="_text_path_data"
+    )
+
+    _sender_data = fields.EncryptedTextField(max_length=100, default="", null=False)
+    sender = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[7], encrypted_field_name="_sender_data"
+    )
 
     class Meta:
         verbose_name_plural = "letters"
