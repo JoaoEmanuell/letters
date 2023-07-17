@@ -11,4 +11,4 @@ class UserSerializer(serializers.ModelSerializer):
 class LetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Letter
-        fields = ["user_token", "date", "text_path", "sender", "letter_token"]
+        fields = ["username", "date", "text_path", "sender", "letter_token"]

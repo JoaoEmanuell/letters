@@ -39,7 +39,7 @@ class LettersListApiView(APIView):
     def post(self, request, *args, **kwargs):
         text_path = generate_random_hash()  # path to save letter
         data = {
-            "user_token": request.data.get("user_token"),
+            "username": request.data.get("username"),
             "date": request.data.get("date"),
             "sender": escape(request.data.get("sender")),
             "text_path": text_path,
@@ -47,10 +47,10 @@ class LettersListApiView(APIView):
         }
         # Validate user token
         try:
-            user = User.objects.get(token=data["user_token"])
+            user = User.objects.get(username=data["username"])
         except User.DoesNotExist:
             return Response(
-                {"detail": "User token is not valid"}, status=HTTP_400_BAD_REQUEST
+                {"detail": "Username is not valid"}, status=HTTP_400_BAD_REQUEST
             )
 
         serializer = LetterSerializer(data=data)
@@ -67,21 +67,27 @@ class LettersListApiView(APIView):
 
 
 class LetterUserListApiView(APIView):
-    def __validate_user(self, token):
+    def __validate_user(self, username: str, token: str):
         try:
-            user_instance = User.objects.get(token=token)
+            user_instance = User.objects.get(username=username, token=token)
             return True
         except User.DoesNotExist:
             return Response(
-                {"detail": "User token is not valid"}, status=HTTP_400_BAD_REQUEST
+                {"detail": "Username or token is not valid"},
+                status=HTTP_400_BAD_REQUEST,
             )
 
-    def get(self, request, user_token, *args, **kwargs):
-        user_instance = self.__validate_user(user_token)
-        if not user_instance:
+    def post(self, request, *args, **kwargs):
+        data = {
+            "username": request.data.get("username"),
+            "token": request.data.get("token"),
+        }
+
+        user_instance = self.__validate_user(**data)
+        if type(user_instance) != bool:
             return user_instance
         else:
-            letters = Letter.objects.filter(user_token=user_token)
+            letters = Letter.objects.filter(username=data["username"])
             serializer = LetterSerializer(letters, many=True)
             serializer_data = serializer.data
 
@@ -97,12 +103,17 @@ class LetterUserListApiView(APIView):
 
             return Response(serializer_data, status=HTTP_200_OK)
 
-    def delete(self, request, user_token, *args, **kwargs):
-        user_instance = self.__validate_user(user_token)
-        if not user_instance:
+    def delete(self, request, *args, **kwargs):
+        data = {
+            "username": request.data.get("username"),
+            "token": request.data.get("token"),
+        }
+
+        user_instance = self.__validate_user(**data)
+        if type(user_instance) != bool:
             return user_instance
         else:
-            letters = Letter.objects.filter(user_token=user_token)
+            letters = Letter.objects.filter(username=data["username"])
 
             # Remove letter from server
 

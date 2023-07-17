@@ -38,5 +38,5 @@ urlpatterns = [
     # Letter route
     path("api/letter", LettersListApiView.as_view()),
     path("api/letter/detail/<str:letter_token>", LetterDetailApiView.as_view()),
-    path("api/letter/user/<str:user_token>", LetterUserListApiView.as_view()),
+    path("api/letter/user/", LetterUserListApiView.as_view()),
 ]
