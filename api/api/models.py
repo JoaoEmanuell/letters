@@ -40,9 +40,9 @@ class User(models.Model):
 
 
 class Letter(models.Model):
-    _user_token_data = fields.EncryptedTextField(max_length=100, default="", null=False)
-    user_token = fields.SearchField(
-        hash_key=FIELD_ENCRYPTION_KEYS[4], encrypted_field_name="_user_token_data"
+    _username_data = fields.EncryptedTextField(max_length=100, default="", null=False)
+    username = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[4], encrypted_field_name="_username_data"
     )
 
     _date_data = fields.EncryptedDateField(max_length=100, auto_now=True, null=False)
