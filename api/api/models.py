@@ -60,5 +60,12 @@ class Letter(models.Model):
         hash_key=FIELD_ENCRYPTION_KEYS[7], encrypted_field_name="_sender_data"
     )
 
+    _letter_token_data = fields.EncryptedTextField(
+        max_length=100, default="", null=False
+    )
+    letter_token = fields.SearchField(
+        hash_key=FIELD_ENCRYPTION_KEYS[8], encrypted_field_name="_letter_token_data"
+    )
+
     class Meta:
         verbose_name_plural = "letters"
