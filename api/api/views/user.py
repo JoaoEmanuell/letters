@@ -10,11 +10,13 @@ from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
 )
+from django.utils.html import escape
+
 
 from .serializers import UserSerializer
 from ..models import User
 
-from main.utils import generate_hash, compare_hash
+from main.utils import generate_hash, compare_hash, generate_random_hash
 
 
 class UserListApiView(APIView):
@@ -29,11 +31,10 @@ class UserListApiView(APIView):
         )
 
     def post(self, request, *args, **kwargs):  # Register user
-        token = generate_hash(f"{randint(1, 100000000)}{date.today()}")
-        token = token.replace("/", "").replace(".", "")
+        token = generate_random_hash()
         data = {
-            "name": request.data.get("name"),
-            "username": request.data.get("username"),
+            "name": escape(request.data.get("name")),
+            "username": escape(request.data.get("username")),
             "password": generate_hash(request.data.get("password")),
             "token": token,
         }
