@@ -1,3 +1,6 @@
+from datetime import datetime
+from random import randint
+
 from bcrypt import hashpw, gensalt, checkpw
 from cryptography.fernet import Fernet
 
@@ -18,6 +21,13 @@ def compare_hash(value: str, hash: str) -> bool:
     if type(hash) != bytes:
         hash = bytes(hash, encoding=ENCODE)
     return checkpw(bytes(value, encoding=ENCODE), hash)
+
+
+def generate_random_hash() -> str:
+    global ENCODE
+    hash = generate_hash(f"{randint(1, 100000000)}{datetime.today()}")
+    hash = hash.replace("/", "").replace(".", "")
+    return hash
 
 
 def cryptograph_text(text: str) -> str:
