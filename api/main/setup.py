@@ -10,6 +10,18 @@ def generate_fernet_key() -> bytes:
     return Fernet.generate_key()
 
 
+def create_letters_dir() -> None:
+    from os import mkdir
+    from os.path import exists
+    from pathlib import Path
+
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    path_to_letters = f"{BASE_DIR}/database/letters/"
+    if not exists(path_to_letters):
+        mkdir(path_to_letters)
+
+
 if __name__ == "__main__":
     # Cryptograph to models
     cryptograph_key = []
@@ -28,3 +40,6 @@ if __name__ == "__main__":
 
     with open("settings.py", "a") as file:
         file.write(cryptograph_str)
+
+    # Path to save letters
+    create_letters_dir()
