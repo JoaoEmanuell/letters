@@ -17,7 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from api.views import UserListApiView, UserDetailApiView, UserLoginApiView
+from api.views import (
+    UserListApiView,
+    UserDetailApiView,
+    UserLoginApiView,
+    LettersListApiView,
+    LetterUserListApiView,
+    LetterDetailApiView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,4 +35,8 @@ urlpatterns = [
     path("api/user", UserListApiView.as_view()),
     path("api/user/detail/<str:token>", UserDetailApiView.as_view()),
     path("api/user/login", UserLoginApiView.as_view()),
+    # Letter route
+    path("api/letter", LettersListApiView.as_view()),
+    path("api/letter/detail/<str:letter_token>", LetterDetailApiView.as_view()),
+    path("api/letter/user/<str:user_token>", LetterUserListApiView.as_view()),
 ]
