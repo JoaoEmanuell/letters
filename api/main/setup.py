@@ -25,7 +25,7 @@ def create_letters_dir() -> None:
 if __name__ == "__main__":
     # Cryptograph to models
     cryptograph_key = []
-    for _ in range(8):  # Number of keys to generate, used to models
+    for _ in range(9):  # Number of keys to generate, used to models
         cryptograph_key.append(generate_token_hex())
 
     cryptograph_str = (
