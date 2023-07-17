@@ -70,7 +70,7 @@ class LetterUserListApiView(APIView):
     def __validate_user(self, token):
         try:
             user_instance = User.objects.get(token=token)
-            return None
+            return True
         except User.DoesNotExist:
             return Response(
                 {"detail": "User token is not valid"}, status=HTTP_400_BAD_REQUEST
