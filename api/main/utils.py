@@ -20,11 +20,13 @@ def compare_hash(value: str, hash: str) -> bool:
     return checkpw(bytes(value, encoding=ENCODE), hash)
 
 
-def cryptograph_text(text: str) -> bytes:
+def cryptograph_text(text: str) -> str:
     global fernet
-    return fernet.encrypt(text.encode("utf-8"))
+    global ENCODE
+    return fernet.encrypt(text.encode(ENCODE)).decode(ENCODE)
 
 
 def decrypt_text(text: str) -> str:
     global fernet
-    return fernet.decrypt(text).decode()
+    global ENCODE
+    return fernet.decrypt(text).decode(ENCODE)
