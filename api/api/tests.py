@@ -104,10 +104,10 @@ class LetterTest(TestCase):
 
     def create_user(self) -> str:
         url = "http://localhost:8000/api/user"
-        data = {"name": "test", "username": "test", "password": "test"}
+        data = {"name": "letter", "username": "letter", "password": "test"}
         response = post(url, data=data)
 
-        return response.json()["token"]
+        return response.json()
 
     def delete_user(self, token: str):
         url = "http://localhost:8000/api/user"
@@ -124,12 +124,14 @@ class LetterTest(TestCase):
         )
 
     def test_crud(self):
-        # User create for get token
-        user_token = self.create_user()
+        # Create user
+        user_data = self.create_user()
+        username = user_data["username"]
+        user_token = user_data["token"]
 
         # Create
         data = {
-            "user_token": user_token,
+            "username": username,
             "date": "01-01-2000",
             "sender": "Anonymous",
             "text": "ABC",
@@ -139,7 +141,7 @@ class LetterTest(TestCase):
         json = response.json()
         letter_token = json["letter_token"]
 
-        self.assertEqual(data["user_token"], json["user_token"])
+        self.assertEqual(data["username"], json["username"])
 
         # GET
         response = get(f"{self.__url}/detail/{letter_token}")
@@ -159,13 +161,14 @@ class LetterTest(TestCase):
         response = post(self.__url, data=data)
 
         # Get all letters from user
-        response = get(f"{self.__url}/user/{user_token}")
+        data_for_all = {"username": username, "token": user_token}
+        response = post(f"{self.__url}/user/", data=data_for_all)
         json = response.json()
 
         self.assertEqual(json[0]["text"], data["text"])
 
         # Delete all letters
-        response = delete(f"{self.__url}/user/{user_token}")
+        response = delete(f"{self.__url}/user/", data=data_for_all)
         json = response.json()
 
         self.assertEqual({"res": "Letters deleted!"}, json)
