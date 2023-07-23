@@ -14,6 +14,7 @@ from cryptography.fernet import InvalidToken
 
 from .serializers import LetterSerializer
 from ..models import Letter, User
+from .common import get_object, raise_object_dont_exist
 
 from main.utils import (
     cryptograph_text,
@@ -127,19 +128,10 @@ class LetterUserListApiView(APIView):
 
 
 class LetterDetailApiView(APIView):
-    def __get_object(self, letter_token: str):
-        try:
-            return Letter.objects.get(letter_token=letter_token)
-        except Letter.DoesNotExist:
-            return None
-
-    def __letter_dont_exists(self) -> Response:
-        return Response({"res": "Letter don't exists"}, status=HTTP_400_BAD_REQUEST)
-
     def get(self, request, letter_token, *args, **kwargs):
-        letter_instance = self.__get_object(letter_token)
+        letter_instance = get_object(Letter, {"letter_token": letter_token})
         if not letter_instance:
-            return self.__letter_dont_exists()
+            return raise_object_dont_exist(Letter)
 
         serializer = LetterSerializer(letter_instance)
         # Decrypt letter
@@ -155,9 +147,9 @@ class LetterDetailApiView(APIView):
         return Response(serializer_data, status=HTTP_200_OK)
 
     def delete(self, request, letter_token, *args, **kwargs):
-        letter_instance = self.__get_object(letter_token)
+        letter_instance = get_object(Letter, {"letter_token": letter_token})
         if not letter_instance:
-            return self.__letter_dont_exists()
+            return raise_object_dont_exist(Letter)
 
         letter_instance.delete()
         remove(f"{LETTER_DIR}/{letter_instance.text_path}.txt")

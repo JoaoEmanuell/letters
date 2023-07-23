@@ -15,6 +15,7 @@ from django.utils.html import escape
 
 from .serializers import UserSerializer
 from ..models import User
+from .common import get_object, raise_object_dont_exist
 
 from main.utils import generate_hash, compare_hash, generate_random_hash
 
@@ -47,15 +48,6 @@ class UserListApiView(APIView):
 
 
 class UserDetailApiView(APIView):
-    def __get_object(self, token: str) -> Union[User, None]:
-        try:
-            return User.objects.get(token=token)
-        except User.DoesNotExist:
-            return None
-
-    def __user_dont_exists(self) -> Response:
-        return Response({"res": "User don't exists"}, status=HTTP_400_BAD_REQUEST)
-
     def __hash_password(self, password: str) -> str:
         if (
             len(password) == 60 and r"$2b$08$" in password
@@ -64,17 +56,17 @@ class UserDetailApiView(APIView):
         return generate_hash(password)
 
     def get(self, request, token, *args, **kwargs) -> Response:
-        user_instance = self.__get_object(token)
+        user_instance = get_object(User, {"token": token})
         if not user_instance:
-            return self.__user_dont_exists()
+            return raise_object_dont_exist(User)
 
         serializer = UserSerializer(user_instance)
         return Response(serializer.data, status=HTTP_200_OK)
 
     def put(self, request, token, *args, **kwargs) -> Response:
-        user_instance = self.__get_object(token)
+        user_instance = get_object(User, {"token": token})
         if not user_instance:
-            return self.__user_dont_exists()
+            return raise_object_dont_exist(User)
 
         optional_fields = ["name", "username", "password"]
         data = {}
@@ -101,9 +93,9 @@ class UserDetailApiView(APIView):
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def delete(self, request, token, *args, **kwargs) -> Response:
-        user_instance = self.__get_object(token)
+        user_instance = get_object(User, {"token": token})
         if not user_instance:
-            return self.__user_dont_exists()
+            return raise_object_dont_exist(User)
 
         user_instance.delete()
 
@@ -111,24 +103,15 @@ class UserDetailApiView(APIView):
 
 
 class UserLoginApiView(APIView):
-    def __get_object(self, username: str) -> Union[User, None]:
-        try:
-            return User.objects.get(username=username)
-        except User.DoesNotExist:
-            return None
-
-    def __user_dont_exists(self) -> Response:
-        return Response({"res": "User don't exists"}, status=HTTP_400_BAD_REQUEST)
-
     def post(self, request, *args, **kwargs) -> Response:
         data = {
             "username": request.data.get("username"),
             "password": request.data.get("password"),
         }
 
-        user_instance = self.__get_object(data["username"])
+        user_instance = get_object(User, {"username": data["username"]})
         if not user_instance:
-            return self.__user_dont_exists()
+            return raise_object_dont_exist(User)
 
         # Validate password
         if compare_hash(data["password"], user_instance.password):
