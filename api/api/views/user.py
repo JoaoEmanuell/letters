@@ -15,7 +15,7 @@ from django.utils.html import escape
 
 from .serializers import UserSerializer
 from ..models import User
-from .common import get_object, raise_object_dont_exist
+from .common import get_object, raise_object_dont_exist, optional_fields
 
 from main.utils import generate_hash, compare_hash, generate_random_hash
 
@@ -68,19 +68,9 @@ class UserDetailApiView(APIView):
         if not user_instance:
             return raise_object_dont_exist(User)
 
-        optional_fields = ["name", "username", "password"]
-        data = {}
-
-        for field in optional_fields:
-            value = request.data.get(field)
-            if not value:
-                data[field] = user_instance.__getattribute__(
-                    field
-                )  # Original value saved
-                data[f"_{field}_data"] = user_instance.__getattribute__(field)
-            else:
-                data[field] = value
-                data[f"_{field}_data"] = value
+        data = optional_fields(
+            user_instance, request.data, ["name", "username", "password"]
+        )
 
         # Password
         data["password"] = self.__hash_password(data["password"])
