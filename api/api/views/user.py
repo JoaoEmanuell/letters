@@ -1,35 +1,30 @@
-from random import randint
-from datetime import date
-from typing import Union
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
-    HTTP_401_UNAUTHORIZED,
 )
+
 from django.utils.html import escape
 
 
 from .serializers import UserSerializer
 from ..models import User
-from .common import get_object, raise_object_dont_exist, optional_fields
+from .common import (
+    get_object,
+    raise_object_dont_exist,
+    optional_fields,
+    format_return_data,
+    staff_get_all,
+)
 
 from main.utils import generate_hash, compare_hash, generate_random_hash
 
 
 class UserListApiView(APIView):
     def get(self, request, *args, **kwargs):  # Get all users, some staff
-        if request.user.is_staff:
-            users = User.objects.all()
-            serializer = UserSerializer(users, many=True)
-            return Response(serializer.data, status=HTTP_200_OK)
-        return Response(
-            {"detail": "Authentication credentials were not provided."},
-            status=HTTP_401_UNAUTHORIZED,
-        )
+        return staff_get_all(request, User, UserSerializer)
 
     def post(self, request, *args, **kwargs):  # Register user
         token = generate_random_hash()
@@ -43,7 +38,9 @@ class UserListApiView(APIView):
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=HTTP_201_CREATED)
+            return Response(
+                {"token": serializer.data["token"]}, status=HTTP_201_CREATED
+            )
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
@@ -61,7 +58,8 @@ class UserDetailApiView(APIView):
             return raise_object_dont_exist(User)
 
         serializer = UserSerializer(user_instance)
-        return Response(serializer.data, status=HTTP_200_OK)
+        data = format_return_data(serializer.data, exclude_fields=["token", "password"])
+        return Response(data, status=HTTP_200_OK)
 
     def put(self, request, token, *args, **kwargs) -> Response:
         user_instance = get_object(User, {"token": token})
@@ -79,7 +77,10 @@ class UserDetailApiView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=HTTP_200_OK)
+            data = format_return_data(
+                serializer.data, exclude_fields=["token", "password"]
+            )
+            return Response(data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def delete(self, request, token, *args, **kwargs) -> Response:
@@ -105,6 +106,6 @@ class UserLoginApiView(APIView):
 
         # Validate password
         if compare_hash(data["password"], user_instance.password):
-            return Response({"res": user_instance.token}, status=HTTP_200_OK)
+            return Response({"token": user_instance.token}, status=HTTP_200_OK)
 
         return Response({"res": "Invalid password"}, status=HTTP_400_BAD_REQUEST)
