@@ -32,11 +32,23 @@ urlpatterns = [
     # Api auth
     path("api-auth/", include("rest_framework.urls")),
     # User route
+    ## User
     path("api/user", UserListApiView.as_view()),
+    path("api/user/", UserListApiView.as_view()),
+    ## Detail
     path("api/user/detail/<str:token>", UserDetailApiView.as_view()),
+    path("api/user/detail/<str:token>/", UserDetailApiView.as_view()),
+    ## Login
     path("api/user/login", UserLoginApiView.as_view()),
+    path("api/user/login/", UserLoginApiView.as_view()),
     # Letter route
+    ## Letter
     path("api/letter", LettersListApiView.as_view()),
+    path("api/letter/", LettersListApiView.as_view()),
+    ## Detail
     path("api/letter/detail/<str:letter_token>", LetterDetailApiView.as_view()),
+    path("api/letter/detail/<str:letter_token>/", LetterDetailApiView.as_view()),
+    ## User
+    path("api/letter/user", LetterUserListApiView.as_view()),
     path("api/letter/user/", LetterUserListApiView.as_view()),
 ]
