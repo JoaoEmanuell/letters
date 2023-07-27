@@ -4,7 +4,11 @@ from django.db.models import Model
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_200_OK,
 )
+from rest_framework.serializers import ModelSerializer
+from rest_framework.request import Request
 
 
 def get_object(model: Model, data: dict) -> Union[Model, None]:
@@ -65,3 +69,77 @@ def optional_fields(
             new_data[f"_{field}_data"] = value
 
     return new_data
+
+
+def format_return_data(
+    data: Union[dict, list[dict]] = {},
+    include_fields: list[str] = [],
+    exclude_fields: list[str] = [],
+) -> dict:
+    """Format the return data
+
+    Args:
+        data (dict, optional): Data to format. Defaults to {}.
+        include_fields (list[str], optional): Include fields, if field is added, this field is returned, others fields is ignored. Defaults to [].
+        exclude_fields (list[str], optional): Exclude fields, if field is added, this field is excluded, others fields is returned. Defaults to [].
+
+    Returns:
+        dict: dict with data validated
+    """
+    # List
+    new_data = []
+    if type(data) == list:
+        for _dict in data:
+            new_data.append(_format_dict(_dict, include_fields, exclude_fields))
+        return new_data
+    # Simple dict
+    else:
+        return _format_dict(data, include_fields, exclude_fields)
+
+
+def _format_dict(
+    data: dict = {}, include_fields: list[str] = [], exclude_fields: list[str] = []
+) -> dict:
+    """Format the dict data
+
+    Args:
+        data (dict, optional): Data to format. Defaults to {}.
+        include_fields (list[str], optional): Include fields, if field is added, this field is returned, others fields is ignored. Defaults to [].
+        exclude_fields (list[str], optional): Exclude fields, if field is added, this field is excluded, others fields is returned. Defaults to [].
+
+    Returns:
+        dict: dict with data validated
+    """
+    if include_fields != []:
+        new_data = {}
+        for field in include_fields:
+            new_data[field] = data.get(field)
+        return new_data
+    elif exclude_fields != []:
+        new_data = data.copy()
+        for field in exclude_fields:
+            new_data.pop(field)
+        return new_data
+    else:
+        return {}
+
+
+def staff_get_all(request: Request, model: Model, serializer: ModelSerializer):
+    """Get all data from model if user is staff
+
+    Args:
+        request (Request): Request from view, to verify if user is staff
+        model (Model): Model to get data
+        serializer (ModelSerializer): Model serializer to serializer data
+
+    Returns:
+        Response: Return a response with data if user is staff or detail if user not staff
+    """
+    if request.user.is_staff:  # Validate if user is staff
+        data = model.objects.all()
+        serialized = serializer(data, many=True)
+        return Response(serialized.data, status=HTTP_200_OK)
+    return Response(
+        {"detail": "Authentication credentials were not provided."},
+        status=HTTP_401_UNAUTHORIZED,
+    )
