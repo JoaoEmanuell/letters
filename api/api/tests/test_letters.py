@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from requests import get, post, put, delete
+from requests import get, post, delete
 
 # Create your tests here.
 
@@ -18,7 +18,7 @@ class LetterTest(TestCase):
 
     def delete_user(self, token: str):
         url = "http://localhost:8000/api/user"
-        response = delete(f"{url}/detail/{token}")
+        delete(f"{url}/detail/{token}")
 
     def test_get_all_letters(self):
         response = get(self.__url)
@@ -33,7 +33,7 @@ class LetterTest(TestCase):
     def test_crud(self):
         # Create user
         user_data = self.create_user()
-        username = user_data["username"]
+        username = "letter"
         user_token = user_data["token"]
 
         # Create
@@ -46,9 +46,15 @@ class LetterTest(TestCase):
 
         response = post(self.__url, data=data)
         json = response.json()
-        letter_token = json["letter_token"]
 
-        self.assertEqual(data["username"], json["username"])
+        self.assertEqual({"res": "Letter sent successfully"}, json)
+
+        # Get letter token
+        response = post(
+            f"{self.__url}/user", data={"username": username, "token": user_token}
+        )
+        json = response.json()
+        letter_token = json[0]["letter_token"]
 
         # GET
         response = get(f"{self.__url}/detail/{letter_token}")

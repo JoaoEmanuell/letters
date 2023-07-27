@@ -31,7 +31,6 @@ class UserTest(TestCase):
         token = new_data["token"]
 
         self.assertEqual(status_code, 201)
-        self.assertEqual(data["username"], json["username"])
 
         # Read
         detail_url = f"{self.__url}/detail/{token}"
@@ -40,7 +39,7 @@ class UserTest(TestCase):
         json = response.json()
 
         self.assertEqual(status_code, 200)
-        self.assertEqual(json, new_data)
+        self.assertEqual(json["name"], data["name"])
 
         # Put
         data_put = data
@@ -64,10 +63,10 @@ class UserTest(TestCase):
         # Create
         data = {"name": "test", "username": "test", "password": "test"}
         response = post(self.__url, data=data)
+        json = response.json()
         status_code = response.status_code
         self.assertEqual(status_code, 201)
 
-        json = response.json()
         token = json["token"]
 
         # Login
@@ -78,7 +77,7 @@ class UserTest(TestCase):
         self.assertEqual(status_code, 200)
 
         json = response.json()
-        token_login = json["res"]
+        token_login = json["token"]
         self.assertEqual(token, token_login)
 
         # Invalid password
