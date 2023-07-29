@@ -1,6 +1,7 @@
 from typing import Union
 
 from django.db.models import Model
+from django.utils.html import escape
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
@@ -65,8 +66,8 @@ def optional_fields(
             )  # Original value saved
             new_data[f"_{field}_data"] = object_instance.__getattribute__(field)
         else:
-            new_data[field] = value
-            new_data[f"_{field}_data"] = value
+            new_data[field] = escape(value)
+            new_data[f"_{field}_data"] = escape(value)
 
     return new_data
 
