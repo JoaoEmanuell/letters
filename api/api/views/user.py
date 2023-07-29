@@ -7,7 +7,7 @@ from rest_framework.status import (
 )
 
 from django.utils.html import escape
-
+from django.http import HttpRequest
 
 from .serializers import UserSerializer
 from ..models import User
@@ -83,10 +83,19 @@ class UserDetailApiView(APIView):
             return Response(data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, token, *args, **kwargs) -> Response:
+    def delete(self, request: HttpRequest, token, *args, **kwargs) -> Response:
         user_instance = get_object(User, {"token": token})
         if not user_instance:
             return raise_object_dont_exist(User)
+
+        # Delete letters
+        from requests import delete
+
+        url = request.build_absolute_uri("/api/letter/user/")  # Url to request
+        data = {"username": user_instance.username, "token": token}
+        delete(url=url, data=data)
+
+        # Delete user
 
         user_instance.delete()
 
