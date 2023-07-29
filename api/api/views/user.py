@@ -77,10 +77,9 @@ class UserDetailApiView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            data = format_return_data(
-                serializer.data, exclude_fields=["token", "password"]
+            return Response(
+                {"res": "Successfully changed user data"}, status=HTTP_200_OK
             )
-            return Response(data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def delete(self, request: HttpRequest, token, *args, **kwargs) -> Response:
