@@ -49,7 +49,7 @@ class UserTest(TestCase):
         status_code = response.status_code
         json = response.json()
         self.assertEqual(status_code, 200)
-        self.assertEqual(json["name"], data_put["name"])
+        self.assertEqual(json, {"res": "Successfully changed user data"})
 
         # Delete
         response = delete(detail_url)
