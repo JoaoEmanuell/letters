@@ -6,10 +6,11 @@
   - [Detalhes](#detalhes)
     - [GET](#get)
     - [PUT](#put)
-    - [DELETE](#delete)
     - [Erros](#erros-1)
-  - [Login](#login)
+    - [DELETE](#delete)
     - [Erros](#erros-2)
+  - [Login](#login)
+    - [Erros](#erros-3)
 
 
 # User
@@ -18,7 +19,7 @@ User é a rota da api responsável por gerenciar operações relacionadas aos us
 
 ## Métodos permitidos
 
-**GET, POST, PUT, DELETE**
+**GET | POST | PUT | DELETE**
 
 ## Index
 
@@ -74,6 +75,12 @@ Exemplo javascript (fetch):
 
     {
         "username":["user with this username already exists."]
+    }
+
+Campo muito longo:
+
+    {
+        "field": ["Ensure this field has no more than {xx} characters."]
     }
 
 ## Detalhes
@@ -142,8 +149,23 @@ Exemplo javascript (fetch):
 **Retorno:**
 
     {
-        res: 'Successfully changed user data'
+        res: "Successfully changed user data"
     }
+
+### Erros
+
+*Username* repetido:
+
+    {
+        "username":["user with this username already exists."]
+    }
+
+Campo muito longo:
+
+    {
+        "field": ["Ensure this field has no more than {xx} characters."]
+    }
+
 
 ### DELETE
 
@@ -174,7 +196,7 @@ Exemplo javascript (fetch):
 *Usuário não existe*
 
     {
-        "res": "User don't exists"
+        "res": "User don"t exists"
     }
 
 *Ocorre quando o token passado é inválido.*
@@ -226,7 +248,7 @@ Exemplo javascript (fetch):
 *Usuário não existe*
 
     {
-        "res": "User don't exists"
+        "res": "User don"t exists"
     }
 
 *Ocorre quando o username passado é inválido.*
@@ -236,7 +258,7 @@ Exemplo javascript (fetch):
 *Senha inválida*
 
     {
-        res: 'Invalid password'
+        res: "Invalid password"
     }
 
 *Ocorre quando a senha passada é inválida*
