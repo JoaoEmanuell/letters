@@ -25,7 +25,7 @@ Letter é a rota da api responsável por gerenciar operações relacionadas às 
 
 ## Index
 
-    http://{endpoint}/api/letter
+    http://{host}/api/letter
 
 ### Registro
 
@@ -48,7 +48,7 @@ Exemplo python:
 
     from requests import post
 
-    url = "http://{endpoint}/api/letter"
+    url = "http://{host}/api/letter"
 
     data = {
         "username": "username",
@@ -61,7 +61,7 @@ Exemplo python:
 
 Exemplo javascript (fetch):
 
-    const url = "http://{endpoint}/api/letter"
+    const url = "http://{host}/api/letter"
     const data = {
         "username": "username",
         "date": "01-01-2000",
@@ -95,7 +95,7 @@ Exemplo javascript (fetch):
 
 User é responsável por gerenciar as cartas recebidas pelo usuário.
 
-    http://{endpoint}/api/letter/user/
+    http://{host}/api/letter/user/
 
 **POST | DELETE**
 
@@ -116,7 +116,7 @@ Exemplo python:
 
     from requests import post
 
-    url = "http://{endpoint}/api/letter/user/"
+    url = "http://{host}/api/letter/user/"
 
     data = {
         "username": "username",
@@ -127,7 +127,7 @@ Exemplo python:
 
 Exemplo javascript (fetch):
 
-    const url = "http://{endpoint}/api/letter/user"
+    const url = "http://{host}/api/letter/user"
     const data = {
         "username": "username",
         "token": "text"
@@ -177,7 +177,7 @@ Exemplo python:
 
     from requests import delete
 
-    url = "http://{endpoint}/api/letter/user/"
+    url = "http://{host}/api/letter/user/"
 
     data = {
         "username": "username",
@@ -188,7 +188,7 @@ Exemplo python:
 
 Exemplo javascript (fetch):
 
-    const url = "http://{endpoint}/api/letter/user"
+    const url = "http://{host}/api/letter/user"
     const data = {
         "username": "username",
         "token": "text"
@@ -220,7 +220,7 @@ Exemplo javascript (fetch):
 
 Serve para gerenciar dados específicos a uma carta.
 
-    http://{endpoint}/api/letter/detail/<letter_token>/
+    http://{host}/api/letter/detail/<letter_token>/
 
 **GET | DELETE**
 
@@ -232,11 +232,11 @@ Exemplo python:
 
     from requests import get
 
-    response = get("http://{endpoint}/api/letter/detail/<letter_token>/")
+    response = get("http://{host}/api/letter/detail/<letter_token>/")
 
 Exemplo javascript (fetch):
 
-    const response = fetch("http://{endpoint}/api/letter/detail/<letter_token>/", {
+    const response = fetch("http://{host}/api/letter/detail/<letter_token>/", {
         method: "GET"
     }).then(response => response.json());
 
@@ -267,11 +267,11 @@ Exemplo python:
 
     from requests import delete
 
-    response = delete("http://{endpoint}/api/letter/detail/<letter_token>/")
+    response = delete("http://{host}/api/letter/detail/<letter_token>/")
 
 Exemplo javascript (fetch):
 
-    const response = fetch("http://{endpoint}/api/letter/detail/<letter_token>/", {
+    const response = fetch("http://{host}/api/letter/detail/<letter_token>/", {
         method: "DELETE"
     }).then(response => response.json());
 

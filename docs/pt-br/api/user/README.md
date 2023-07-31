@@ -23,7 +23,7 @@ User é a rota da api responsável por gerenciar operações relacionadas aos us
 
 ## Index
 
-    http://{endpoint}/api/user
+    http://{host}/api/user
 
 ### Registro
 
@@ -47,11 +47,11 @@ Exemplo python:
 
     data = {"name": "test", "username": "test", "password": "test"}
 
-    response = post("http://{endpoint}/api/user", data=data)
+    response = post("http://{host}/api/user", data=data)
 
 Exemplo javascript (fetch):
 
-    const url = "http://{endpoint}/api/user"
+    const url = "http://{host}/api/user"
     const data = {"name": "test", "username": "test", "password": "test"}
 
     const response = fetch(url, { 
@@ -85,7 +85,7 @@ Campo muito longo:
 
 ## Detalhes
 
-    http://{endpoint}/api/user/detail/<token>
+    http://{host}/api/user/detail/<token>
 
 **GET**, **PUT**, **DELETE**
 
@@ -99,11 +99,11 @@ Exemplo python:
 
     from requests import get
 
-    response = get("http://{endpoint}/api/user/detail/<token>")
+    response = get("http://{host}/api/user/detail/<token>")
 
 Exemplo javascript (fetch):
 
-    const response = fetch("http://{endpoint}/api/user/detail/<token>", {
+    const response = fetch("http://{host}/api/user/detail/<token>", {
         method: "GET"
     }).then(response => response.json());
 
@@ -134,11 +134,11 @@ Exemplo python:
 
     data = {"name": "name"}
 
-    response = put("http://{endpoint}/api/user/detail/<token>", data=data)
+    response = put("http://{host}/api/user/detail/<token>", data=data)
 
 Exemplo javascript (fetch):
 
-    const response = fetch("http://{endpoint}/api/user/detail/<token>", {
+    const response = fetch("http://{host}/api/user/detail/<token>", {
         method: "PUT",
         body: JSON.stringify({"name": "name"}),
         headers: {
@@ -177,11 +177,11 @@ Exemplo python:
 
     from requests import delete
 
-    response = delete("http://{endpoint}/api/user/detail/<token>")
+    response = delete("http://{host}/api/user/detail/<token>")
 
 Exemplo javascript (fetch):
 
-    const response = fetch("http://{endpoint}/api/user/detail/<token>", {
+    const response = fetch("http://{host}/api/user/detail/<token>", {
         method: "DELETE"
     }).then(response => response.json());
 
@@ -203,7 +203,7 @@ Exemplo javascript (fetch):
 
 ## Login
 
-    http://{endpoint}/api/user/login/
+    http://{host}/api/user/login/
 
 **POST**
 
@@ -222,11 +222,11 @@ Exemplo python:
 
     data = {"username": "test", "password": "test"}
 
-    response = post("http://{endpoint}/api/user/login/", data=data)
+    response = post("http://{host}/api/user/login/", data=data)
 
 Exemplo javascript (fetch):
 
-    const url = "http://{endpoint}/api/user/login/"
+    const url = "http://{host}/api/user/login/"
     const data = {"username": "test", "password": "test"}
 
     const response = fetch(url, { 
