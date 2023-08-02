@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from os import getenv
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,8 +30,11 @@ SECRET_KEY = "our_secret_here"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+hosts = getenv("ALLOWED_HOSTS")
+hosts = hosts.rsplit(",")  # Transform in list
+hosts = [host.strip() for host in hosts]  # Remove spaces
 
+ALLOWED_HOSTS = hosts
 
 # Application definition
 
@@ -142,6 +150,9 @@ REST_FRAMEWORK = {
 
 # CORS
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost",
-]
+cors_host = []
+for host in ALLOWED_HOSTS:
+    cors_host.append(f"http://{host}")
+    cors_host.append(f"https://{host}")
+
+CORS_ALLOWED_ORIGINS = cors_host
