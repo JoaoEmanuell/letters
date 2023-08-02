@@ -256,7 +256,7 @@ Exemplo javascript (fetch):
 *Token* inválido:
 
     {
-        "res": "Letter don"t exists"
+        "res": "Letter don't exists"
     }
 
 ### DELETE
@@ -286,5 +286,5 @@ Exemplo javascript (fetch):
 *Token* inválido:
 
     {
-        "res": "Letter don"t exists"
+        "res": "Letter don't exists"
     }

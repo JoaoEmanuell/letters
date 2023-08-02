@@ -1,4 +1,6 @@
 - [Desenvolvimento](#desenvolvimento)
+  - [Env](#env)
+  - [Docker](#docker)
   - [Settings](#settings)
 - [Database](#database)
 - [Executando](#executando)
@@ -10,6 +12,16 @@
 Certifique-se de ter o *docker* e o *docker-compose* instalados.
 
 Navegue até a pasta da api
+
+## Env
+
+Copie o *.env_example* e crie um arquivo chamado de *.env*, ele irá configurar as variáveis de ambiente.
+
+*ALLOWED_HOSTS*: Hosts que podem acessar a api, escreva sem o uso de aspas e separando os hosts por vírgula
+
+    ALLOWED_HOSTS=localhost, abc, foo, bar
+
+## Docker
 
 Faça a build:
 
@@ -27,15 +39,13 @@ Navegue até a pasta *main* e execute o setup.py
 
     python setup.py
 
-Ele irá criar uma copia de *settings_example*, criar a *database*, pasta para armazenamento das *letters*, configurações de criptografia.
+Ele irá criar uma copia de *settings_example* ou restaurar o *settings* caso haja um backup dele, criar a *database*, pasta para armazenamento das *letters*, configurações de criptografia.
 
 Em suma, o *setup* permite a configuração automática de tudo necessário para a execução do programa.
 
+**Nota:** Em *database/backups* você pode encontrar uma cópia de *settings.py*, isso existe para fazer um backup das chaves de criptografia, dessa forma, caso seja necessário reiniciar o *container*, ele irá automaticamente restaurar as chaves, desse modo, a *database* não será inutilizada.
+
 ## Settings
-
-No settings, lembre-se de configurar os *ALLOWED_HOSTS* para permitir o acesso a api por outros hosts.
-
-    ALLOWED_HOSTS = ["host"]
 
 Para o desenvolvimento, pode-ser útil a visualização dos dados no navegador, para isso comente a linha *DEFAULT_RENDERER_CLASSES*
 

@@ -196,7 +196,7 @@ Exemplo javascript (fetch):
 *Usuário não existe*
 
     {
-        "res": "User don"t exists"
+        "res": "User don't exists"
     }
 
 *Ocorre quando o token passado é inválido.*
@@ -248,7 +248,7 @@ Exemplo javascript (fetch):
 *Usuário não existe*
 
     {
-        "res": "User don"t exists"
+        "res": "User don't exists"
     }
 
 *Ocorre quando o username passado é inválido.*
