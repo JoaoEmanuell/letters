@@ -1,5 +1,3 @@
-export function ValidatorFormScript(){
-    return (
-        <script src="/static/js/validatorForm.js" defer></script>
-    )
+export function ValidatorFormScript() {
+    return <script src="/static/js/validatorForm.js" defer></script>
 }
