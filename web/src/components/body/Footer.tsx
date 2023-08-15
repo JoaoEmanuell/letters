@@ -1,12 +1,11 @@
 import Image from 'next/image'
-import { CenterDiv } from '../CenterDiv'
 import github from '../../assets/github.svg'
 
 export function Footer() {
     const date = new Date()
     const year = date.getFullYear()
     return (
-        <footer className="footer mt-auto px-4">
+        <footer className="footer mt-auto px-4 py-1 border-top">
             <div className="d-flex justify-content-between">
                 <p>
                     <a
