@@ -1,6 +1,6 @@
 import { CenterDiv } from '@/components/CenterDiv'
 import { Label } from '@/components/form/Label'
-import { ValidatorFormScript } from '@/components/form/ValidatorFormScript'
+import { Form } from '@/components/form/Form'
 import { PasswordInput } from '@/components/form/PasswordInput'
 import { SubmitButton } from '@/components/form/SubmitButton'
 import { FormField } from '@/components/form/FormField'
@@ -9,12 +9,7 @@ export default function UserRegister() {
     return (
         <main>
             <CenterDiv>
-                <form
-                    action=""
-                    method="get"
-                    className="needs-validation"
-                    noValidate
-                >
+                <Form action="" method="get">
                     <h1 className="text-center">Registre-se</h1>
                     <FormField
                         labelText="Nome: "
@@ -39,8 +34,7 @@ export default function UserRegister() {
                     <div className="mt-3">
                         <SubmitButton text="Cadastrar" />
                     </div>
-                    <ValidatorFormScript />
-                </form>
+                </Form>
             </CenterDiv>
         </main>
     )
