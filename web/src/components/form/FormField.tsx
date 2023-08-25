@@ -8,6 +8,8 @@ interface FormFieldInterface {
     inputType: string
     inputId: string
     inputMaxLength: number
+    inputDefaultValue?: string
+    inputPlaceholder?: string
     invalidFeedbackMessage: string
     validFeedbackMessage: string
 }
@@ -22,6 +24,8 @@ export function FormField(props: FormFieldInterface) {
                 id={props.inputId}
                 required={true}
                 maxLength={props.inputMaxLength}
+                value={props.inputDefaultValue}
+                placeholder={props.inputPlaceholder}
             />
             <InvalidFeedback text={props.invalidFeedbackMessage} />
             <ValidFeedback text={props.validFeedbackMessage} />
