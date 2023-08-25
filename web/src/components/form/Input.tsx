@@ -4,6 +4,8 @@ interface InputInterface {
     id: string
     required?: boolean
     maxLength?: number
+    value?: string
+    placeholder?: string
 }
 
 export function Input(props: InputInterface) {
@@ -14,6 +16,8 @@ export function Input(props: InputInterface) {
             id={props.id}
             required={props.required}
             maxLength={props.maxLength}
+            defaultValue={props.value}
+            placeholder={props.placeholder}
             className="form-control"
         />
     )
