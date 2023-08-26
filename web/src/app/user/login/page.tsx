@@ -1,4 +1,4 @@
-import { CenterDiv } from '@/components/CenterDiv'
+import { CenterDiv } from '@/components/body/CenterDiv'
 import { Form } from '@/components/form/Form'
 import { FormField } from '@/components/form/FormField'
 import { Label } from '@/components/form/Label'
@@ -24,9 +24,17 @@ export default function UserLogin() {
                         <PasswordInput />
                     </div>
                     <div className="mt-3">
-                        <SubmitButton text="Cadastrar" />
+                        <SubmitButton text="Acessar" />
                     </div>
                 </Form>
+            </CenterDiv>
+            <CenterDiv>
+                <div className="mt-3">
+                    <p>Não possui cadastro?</p>
+                    <p>
+                        <a href="/user/register">Cadastre-se!</a>
+                    </p>
+                </div>
             </CenterDiv>
         </main>
     )

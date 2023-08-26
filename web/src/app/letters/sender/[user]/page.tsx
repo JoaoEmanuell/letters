@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation'
 
-import { CenterDiv } from '@/components/CenterDiv'
+import { CenterDiv } from '@/components/body/CenterDiv'
 import { Form } from '@/components/form/Form'
 import { FormField } from '@/components/form/FormField'
 import { SubmitButton } from '@/components/form/SubmitButton'

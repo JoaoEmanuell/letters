@@ -1,4 +1,4 @@
-import { CenterDiv } from '@/components/CenterDiv'
+import { CenterDiv } from '@/components/body/CenterDiv'
 import { Label } from '@/components/form/Label'
 import { Form } from '@/components/form/Form'
 import { PasswordInput } from '@/components/form/PasswordInput'
