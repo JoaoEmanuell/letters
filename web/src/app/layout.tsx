@@ -25,6 +25,7 @@ export default function RootLayout({
             </head>
             <body className="d-flex flex-column h-100">
                 <Header />
+                <div id="divFlash" className="mt-4"></div>
                 <main className="container mt-4">{children}</main>
                 <Footer />
             </body>
