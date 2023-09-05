@@ -9,9 +9,9 @@ import { GetValues } from '@/functions/fetch/inputs/GetValues'
 import { ValidateValues } from '@/functions/fetch/inputs/ValidateValues'
 import { PostFetch } from '@/functions/fetch/requests/Post'
 import { useCookies } from 'next-client-cookies'
-import { GetExpire } from '@/functions/cookies/GetExpire'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 import { TranslatorRegister } from '@/functions/api/requests/translator/register/TranslatorRegister'
+import { SetCookie } from '@/functions/cookies/SetCookie'
 
 export default function UserRegister() {
     const cookies = useCookies()
@@ -39,12 +39,7 @@ export default function UserRegister() {
                     ShowFlashMessage('danger', requestTranslated.message)
                 } else {
                     // Save
-                    const expireTime = GetExpire()
-                    cookies.set('userToken', data['token'], {
-                        secure: true,
-                        expires: expireTime,
-                        sameSite: 'strict',
-                    })
+                    SetCookie(cookies, 'userToken', data['token'])
                     ShowFlashMessage(
                         'success',
                         'Registro finalizado com sucesso!'
