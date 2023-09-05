@@ -1,15 +1,62 @@
+'use client'
+
 import { CenterDiv } from '@/components/body/CenterDiv'
 import { Label } from '@/components/form/Label'
-import { Form } from '@/components/form/Form'
 import { PasswordInput } from '@/components/form/PasswordInput'
 import { SubmitButton } from '@/components/form/SubmitButton'
 import { FormField } from '@/components/form/FormField'
+import { GetValues } from '@/functions/fetch/inputs/GetValues'
+import { ValidateValues } from '@/functions/fetch/inputs/ValidateValues'
+import { PostFetch } from '@/functions/fetch/requests/Post'
+import { useCookies } from 'next-client-cookies'
+import { GetExpire } from '@/functions/cookies/GetExpire'
+import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
+import { TranslatorRegister } from '@/functions/api/requests/translator/register/TranslatorRegister'
 
 export default function UserRegister() {
+    const cookies = useCookies()
+    const fetchUserRegister = async () => {
+        // Div form
+        const divForm = document.getElementById('form')
+        divForm?.classList.remove('was-validated')
+        // Inputs
+        const inputsNames = ['name', 'username', 'password']
+
+        const data = GetValues(window, inputsNames)
+
+        const validateInputs = ValidateValues(data)
+
+        if (validateInputs) {
+            divForm?.classList.add('was-validated')
+        } else {
+            // Register on api
+            const apiHost = process.env.API_HOST as string
+            const json = PostFetch(`${apiHost}/user/`, data)
+            json.then((data) => {
+                // Validate
+                const requestTranslated = TranslatorRegister(data)
+                if (requestTranslated.type == 'danger') {
+                    ShowFlashMessage('danger', requestTranslated.message)
+                } else {
+                    // Save
+                    const expireTime = GetExpire()
+                    cookies.set('userToken', data['token'], {
+                        secure: true,
+                        expires: expireTime,
+                        sameSite: 'strict',
+                    })
+                    ShowFlashMessage(
+                        'success',
+                        'Registro finalizado com sucesso!'
+                    )
+                }
+            })
+        }
+    }
     return (
         <main>
             <CenterDiv>
-                <Form action="" method="get">
+                <div id="form" className="needs-validation">
                     <h1 className="text-center">Registre-se</h1>
                     <FormField
                         labelText="Nome: "
@@ -32,9 +79,12 @@ export default function UserRegister() {
                         <PasswordInput />
                     </div>
                     <div className="mt-3">
-                        <SubmitButton text="Cadastrar" />
+                        <SubmitButton
+                            text="Cadastrar"
+                            onClick={fetchUserRegister}
+                        />
                     </div>
-                </Form>
+                </div>
             </CenterDiv>
         </main>
     )
