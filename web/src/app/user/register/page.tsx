@@ -8,13 +8,11 @@ import { FormField } from '@/components/form/FormField'
 import { GetValues } from '@/functions/fetch/inputs/GetValues'
 import { ValidateValues } from '@/functions/fetch/inputs/ValidateValues'
 import { PostFetch } from '@/functions/fetch/requests/Post'
-import { useCookies } from 'next-client-cookies'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 import { TranslatorRegister } from '@/functions/api/requests/translator/register/TranslatorRegister'
 import { SetCookie } from '@/functions/cookies/SetCookie'
 
 export default function UserRegister() {
-    const cookies = useCookies()
     const fetchUserRegister = async () => {
         // Div form
         const divForm = document.getElementById('form')
@@ -39,7 +37,7 @@ export default function UserRegister() {
                     ShowFlashMessage('danger', requestTranslated.message)
                 } else {
                     // Save
-                    SetCookie(cookies, 'userToken', data['token'])
+                    SetCookie('userToken', data['token'])
                     ShowFlashMessage(
                         'success',
                         'Registro finalizado com sucesso!'
