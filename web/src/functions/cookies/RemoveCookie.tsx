@@ -1,5 +1,3 @@
-import { Cookies } from 'next-client-cookies'
-
-export function RemoveCookie(cookies: Cookies, name: string) {
-    return cookies.remove(name)
+export function RemoveCookie(name: string) {
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`
 }

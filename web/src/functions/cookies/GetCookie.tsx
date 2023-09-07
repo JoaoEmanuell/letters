@@ -1,5 +1,14 @@
-import { Cookies } from 'next-client-cookies'
+export function GetCookie(cookieName: string) {
+    const name = `${cookieName}`
+    const cookies = document.cookie.split(';')
+    var cookieValue = ''
 
-export function GetCookie(cookies: Cookies, name: string) {
-    return cookies.get(name)
+    cookies.forEach((cookie) => {
+        const cookieKey = cookie.split('=')[0].trim()
+        if (cookieKey == name) {
+            cookieValue = cookie.split('=')[1].trim()
+        }
+    })
+
+    return cookieValue
 }
