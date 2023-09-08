@@ -11,8 +11,13 @@ import { PostFetch } from '@/functions/fetch/requests/Post'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 import { TranslatorRegister } from '@/functions/api/requests/translator/register/TranslatorRegister'
 import { SetCookie } from '@/functions/cookies/SetCookie'
+import { GetCookie } from '@/functions/cookies/GetCookie'
 
 export default function UserRegister() {
+    // Validate if user is authenticated
+    if (GetCookie('userToken') !== '') {
+        window.location.replace(`/`)
+    }
     const fetchUserRegister = async () => {
         // Div form
         const divForm = document.getElementById('form')
@@ -20,16 +25,16 @@ export default function UserRegister() {
         // Inputs
         const inputsNames = ['name', 'username', 'password']
 
-        const data = GetValues(window, inputsNames)
+        const dataInputs = GetValues(window, inputsNames)
 
-        const validateInputs = ValidateValues(data)
+        const validateInputs = ValidateValues(dataInputs)
 
         if (validateInputs) {
             divForm?.classList.add('was-validated')
         } else {
             // Register on api
             const apiHost = process.env.API_HOST as string
-            const json = PostFetch(`${apiHost}/user/`, data)
+            const json = PostFetch(`${apiHost}/user/`, dataInputs)
             json.then((data) => {
                 // Validate
                 const requestTranslated = TranslatorRegister(data)
@@ -37,11 +42,15 @@ export default function UserRegister() {
                     ShowFlashMessage('danger', requestTranslated.message)
                 } else {
                     // Save
-                    SetCookie('userToken', data['token'])
-                    ShowFlashMessage(
-                        'success',
-                        'Registro finalizado com sucesso!'
-                    )
+                    SetCookie('userToken', data['token']) // User token
+                    SetCookie('name', dataInputs['name']) // Name
+                    SetCookie('username', dataInputs['username']) // Username
+
+                    SetCookie(
+                        'flash',
+                        'success+Registro finalizado com sucesso!'
+                    ) // Flash message
+                    window.location.replace(`/`)
                 }
             })
         }
