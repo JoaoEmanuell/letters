@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { Header } from '@/components/body/Header'
 import { Footer } from '@/components/body/Footer'
-import { FlashMessage } from '@/components/body/flash/FlashMessage'
+import FlashMessage from '@/components/body/flash/FlashMessage'
 
 export const metadata: Metadata = {
     title: 'Letters',
@@ -27,7 +27,7 @@ export default function RootLayout({
             <body className="d-flex flex-column h-100">
                 <Header />
                 <div id="divFlash" className="mt-4">
-                    <FlashMessage></FlashMessage>
+                    <FlashMessage />
                 </div>
                 <main className="container mt-4">{children}</main>
                 <Footer />
