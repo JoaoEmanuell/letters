@@ -1,16 +1,19 @@
 'use client'
 
 import { CenterDiv } from '../CenterDiv'
-import dompurify from 'dompurify'
+import dompurify from 'dompurify' // Sanitize
+import { GetCookie } from '@/functions/cookies/GetCookie'
+import { RemoveCookie } from '@/functions/cookies/RemoveCookie'
+import dynamic from 'next/dynamic'
 
 type flashMessageType = 'success' | 'danger'
 
-interface FlashMessage {
+interface FlashMessageInterface {
     type?: flashMessageType
     message?: string
 }
 
-export function FlashMessage(props: FlashMessage) {
+function FlashMessage(props: FlashMessageInterface) {
     // Jsx return
     const returnContent = (
         flashMessageType: flashMessageType,
@@ -32,22 +35,18 @@ export function FlashMessage(props: FlashMessage) {
     if (props.type && props.message) {
         return returnContent(props.type, props.message)
     } else {
-        // If set the component in html, and use the query params to configure
-        try {
-            const urlParams = new URLSearchParams(window.location.search)
-            const flashMessage = urlParams.get('flash')
-            if (flashMessage) {
-                const messageType = flashMessage.split(
-                    ';'
-                )[0] as flashMessageType
-                const message = flashMessage.split(';')[1] as string
-                return returnContent(messageType, message)
-            }
-        } catch (error) {
-            if (error instanceof ReferenceError) {
-                // Case don't exists the window
-                return
-            }
+        // If set the component in html, and use the cookies to configure
+
+        const flashCookie = GetCookie('flash')
+        if (flashCookie) {
+            const messageType = flashCookie.split('+')[0] as flashMessageType
+            const message = flashCookie.split('+')[1] as string
+            RemoveCookie('flash') // Delete the cookie
+            return returnContent(messageType, message) // Show the message
         }
     }
 }
+
+export default dynamic(() => Promise.resolve(FlashMessage), {
+    ssr: false,
+}) // Disable pre render component

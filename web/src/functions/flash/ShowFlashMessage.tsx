@@ -1,6 +1,6 @@
 'use client'
 
-import { FlashMessage } from '../../components/body/flash/FlashMessage'
+import FlashMessage from '../../components/body/flash/FlashMessage'
 import { renderToString } from 'react-dom/server'
 
 type flashType = 'success' | 'danger' | undefined
