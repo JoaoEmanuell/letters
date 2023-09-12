@@ -1,21 +1,44 @@
-import { UsernameAlreadyExistis } from '../common/UsernameAlreadyExistis'
 import { TranslatorReturnInterface } from '../common/TranslatorReturnInterface'
 
-export function TranslatorRegister(json: object): TranslatorReturnInterface {
+export function TranslatorLogin(json: object): TranslatorReturnInterface {
     // Translators
     const CorrectReturn = (json: object) => {
         if (json.hasOwnProperty('token')) {
             return {
                 status: true,
-                message: 'Usuário registrado com sucesso!',
+                message: 'Login realizado com sucesso!',
                 type: 'success',
             }
-        } else {
-            return { status: false }
         }
+        return { status: false }
+    }
+    const UserNotExists = (json: object) => {
+        if (json.hasOwnProperty('res')) {
+            if (json['res'] == "User don't exists") {
+                return {
+                    status: true,
+                    message: 'Usuário não existe!',
+                    type: 'danger',
+                }
+            }
+        }
+        return { status: false }
+    }
+
+    const InvalidPassword = (json: object) => {
+        if (json.hasOwnProperty('res')) {
+            if (json['res'] == 'Invalid password') {
+                return {
+                    status: true,
+                    message: 'Senha inválida',
+                    type: 'danger',
+                }
+            }
+        }
+        return { status: false }
     }
     // Run
-    const chain = [CorrectReturn, UsernameAlreadyExistis]
+    const chain = [CorrectReturn, UserNotExists, InvalidPassword]
     var translatorMessage: TranslatorReturnInterface | undefined
     chain.forEach((translator) => {
         const translatorReturn = translator(json)
