@@ -11,13 +11,8 @@ import { PostFetch } from '@/functions/fetch/requests/Post'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 import { TranslatorRegister } from '@/functions/api/requests/translator/register/TranslatorRegister'
 import { SetCookie } from '@/functions/cookies/SetCookie'
-import { GetCookie } from '@/functions/cookies/GetCookie'
 
 export default function UserRegister() {
-    // Validate if user is authenticated
-    if (GetCookie('userToken') !== '') {
-        window.location.replace(`/`)
-    }
     const fetchUserRegister = async () => {
         // Div form
         const divForm = document.getElementById('form')

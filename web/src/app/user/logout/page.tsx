@@ -1,7 +1,6 @@
 'use client'
 
 import { CenterDiv } from '@/components/body/CenterDiv'
-import { GetCookie } from '@/functions/cookies/GetCookie'
 import { RemoveCookie } from '@/functions/cookies/RemoveCookie'
 import { SetCookie } from '@/functions/cookies/SetCookie'
 
@@ -13,10 +12,6 @@ export default function UserLogout() {
         })
         SetCookie('flash', 'success+Saída realizada com sucesso!') // Flash message
         window.location.replace('/')
-    }
-    // Validate if user is not authenticated
-    if (GetCookie('userToken') === '') {
-        window.location.replace(`/`)
     }
     return (
         <main>

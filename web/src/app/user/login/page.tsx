@@ -11,13 +11,8 @@ import { PostFetch } from '@/functions/fetch/requests/Post'
 import { TranslatorLogin } from '@/functions/api/requests/translator/login/TranslatorLogin'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 import { SetCookie } from '@/functions/cookies/SetCookie'
-import { GetCookie } from '@/functions/cookies/GetCookie'
 
 export default function UserLogin() {
-    // Validate if user is authenticated
-    if (GetCookie('userToken') !== '') {
-        window.location.replace(`/`)
-    }
     const fetchLoginUser = async () => {
         // Div form
         const divForm = document.getElementById('form')
