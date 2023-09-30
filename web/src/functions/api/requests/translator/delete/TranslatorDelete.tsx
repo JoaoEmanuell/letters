@@ -1,5 +1,6 @@
 import { TranslatorReturnInterface } from '../common/TranslatorReturnInterface'
 import { UserNotExists } from '../common/UserNotExists'
+import { TranslatorRun } from '../common/TranslatorRun'
 
 export function TranslatorDelete(json: object): TranslatorReturnInterface {
     // Translators
@@ -16,7 +17,8 @@ export function TranslatorDelete(json: object): TranslatorReturnInterface {
         return { status: false }
     }
     // Run
-    const chain = [CorrectReturn, UserNotExists]
+    return TranslatorRun(json, [CorrectReturn, UserNotExists])
+    /*const chain = [CorrectReturn, UserNotExists]
     var translatorMessage: TranslatorReturnInterface | undefined
     chain.forEach((translator) => {
         const translatorReturn = translator(json)
@@ -36,5 +38,5 @@ export function TranslatorDelete(json: object): TranslatorReturnInterface {
                 'Um erro desconhecido impediu a conta de ser deletada, tente novamente mais tarde!',
             type: 'danger',
         }
-    }
+    }*/
 }

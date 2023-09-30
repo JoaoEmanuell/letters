@@ -1,5 +1,6 @@
 import { TranslatorReturnInterface } from '../common/TranslatorReturnInterface'
 import { UserNotExists } from '../common/UserNotExists'
+import { TranslatorRun } from '../common/TranslatorRun'
 
 export function TranslatorLogin(json: object): TranslatorReturnInterface {
     // Translators
@@ -27,7 +28,8 @@ export function TranslatorLogin(json: object): TranslatorReturnInterface {
         return { status: false }
     }
     // Run
-    const chain = [CorrectReturn, UserNotExists, InvalidPassword]
+    return TranslatorRun(json, [CorrectReturn, UserNotExists, InvalidPassword])
+    /*const chain = [CorrectReturn, UserNotExists, InvalidPassword]
     var translatorMessage: TranslatorReturnInterface | undefined
     chain.forEach((translator) => {
         const translatorReturn = translator(json)
@@ -47,5 +49,5 @@ export function TranslatorLogin(json: object): TranslatorReturnInterface {
                 'Um erro desconhecido impediu o registro, tente novamente mais tarde!',
             type: 'danger',
         }
-    }
+    }*/
 }

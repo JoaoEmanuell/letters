@@ -1,5 +1,6 @@
 import { UsernameAlreadyExistis } from '../common/UsernameAlreadyExistis'
 import { TranslatorReturnInterface } from '../common/TranslatorReturnInterface'
+import { TranslatorRun } from '../common/TranslatorRun'
 
 export function TranslatorRegister(json: object): TranslatorReturnInterface {
     // Translators
@@ -15,7 +16,8 @@ export function TranslatorRegister(json: object): TranslatorReturnInterface {
         }
     }
     // Run
-    const chain = [CorrectReturn, UsernameAlreadyExistis]
+    return TranslatorRun(json, [CorrectReturn, UsernameAlreadyExistis])
+    /*const chain = [CorrectReturn, UsernameAlreadyExistis]
     var translatorMessage: TranslatorReturnInterface | undefined
     chain.forEach((translator) => {
         const translatorReturn = translator(json)
@@ -35,5 +37,5 @@ export function TranslatorRegister(json: object): TranslatorReturnInterface {
                 'Um erro desconhecido impediu o registro, tente novamente mais tarde!',
             type: 'danger',
         }
-    }
+    }*/
 }
