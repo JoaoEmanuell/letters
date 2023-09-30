@@ -1,33 +1,22 @@
 import { TranslatorReturnInterface } from '../common/TranslatorReturnInterface'
 import { UserNotExists } from '../common/UserNotExists'
 
-export function TranslatorLogin(json: object): TranslatorReturnInterface {
+export function TranslatorDelete(json: object): TranslatorReturnInterface {
     // Translators
     const CorrectReturn = (json: object) => {
-        if (json.hasOwnProperty('token')) {
-            return {
-                status: true,
-                message: 'Login realizado com sucesso!',
-                type: 'success',
-            }
-        }
-        return { status: false }
-    }
-
-    const InvalidPassword = (json: object) => {
         if (json.hasOwnProperty('res')) {
-            if (json['res'] == 'Invalid password') {
+            if (json['res'] === 'User deleted!') {
                 return {
                     status: true,
-                    message: 'Senha inválida',
-                    type: 'danger',
+                    message: 'Conta deletada com sucesso!',
+                    type: 'success',
                 }
             }
         }
         return { status: false }
     }
     // Run
-    const chain = [CorrectReturn, UserNotExists, InvalidPassword]
+    const chain = [CorrectReturn, UserNotExists]
     var translatorMessage: TranslatorReturnInterface | undefined
     chain.forEach((translator) => {
         const translatorReturn = translator(json)
@@ -44,7 +33,7 @@ export function TranslatorLogin(json: object): TranslatorReturnInterface {
     } else {
         return {
             message:
-                'Um erro desconhecido impediu o registro, tente novamente mais tarde!',
+                'Um erro desconhecido impediu a conta de ser deletada, tente novamente mais tarde!',
             type: 'danger',
         }
     }
