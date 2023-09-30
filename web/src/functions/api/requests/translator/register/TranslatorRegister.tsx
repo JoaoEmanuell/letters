@@ -17,25 +17,4 @@ export function TranslatorRegister(json: object): TranslatorReturnInterface {
     }
     // Run
     return TranslatorRun(json, [CorrectReturn, UsernameAlreadyExistis])
-    /*const chain = [CorrectReturn, UsernameAlreadyExistis]
-    var translatorMessage: TranslatorReturnInterface | undefined
-    chain.forEach((translator) => {
-        const translatorReturn = translator(json)
-        if (translatorReturn.status == true) {
-            translatorMessage = {
-                message: translatorReturn.message as string,
-                type: translatorReturn.type as 'danger' | 'success',
-            }
-            return
-        }
-    })
-    if (translatorMessage) {
-        return translatorMessage
-    } else {
-        return {
-            message:
-                'Um erro desconhecido impediu o registro, tente novamente mais tarde!',
-            type: 'danger',
-        }
-    }*/
 }
