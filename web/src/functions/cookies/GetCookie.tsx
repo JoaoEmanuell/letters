@@ -10,5 +10,5 @@ export function GetCookie(cookieName: string) {
         }
     })
 
-    return cookieValue
+    return decodeURIComponent(cookieValue)
 }
