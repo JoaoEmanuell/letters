@@ -1,10 +1,10 @@
 'use client'
 
 import { CenterDiv } from '../CenterDiv'
-import dompurify from 'dompurify' // Sanitize
 import { GetCookie } from '@/functions/cookies/GetCookie'
 import { RemoveCookie } from '@/functions/cookies/RemoveCookie'
 import dynamic from 'next/dynamic'
+import xss from 'xss'
 
 type flashMessageType = 'success' | 'danger'
 
@@ -26,7 +26,7 @@ function FlashMessage(props: FlashMessageInterface) {
         const flashClass = divFlashClasses[flashMessageType] // Get the style
         return (
             <CenterDiv>
-                <div className={flashClass}>{dompurify.sanitize(message)}</div>
+                <div className={flashClass}>{xss(message)}</div>
             </CenterDiv>
         ) // Sanitize the message
     }
