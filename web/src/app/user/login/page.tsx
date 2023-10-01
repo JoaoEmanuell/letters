@@ -8,7 +8,7 @@ import { SubmitButton } from '@/components/form/SubmitButton'
 import { GetValues } from '@/functions/fetch/inputs/GetValues'
 import { ValidateValues } from '@/functions/fetch/inputs/ValidateValues'
 import { PostFetch } from '@/functions/fetch/requests/Post'
-import { TranslatorLogin } from '@/functions/api/requests/translator/login/TranslatorLogin'
+import { TranslatorLogin } from '@/functions/api/requests/translator/user/login/TranslatorLogin'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 import { SetCookie } from '@/functions/cookies/SetCookie'
 

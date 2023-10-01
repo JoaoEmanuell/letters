@@ -1,6 +1,6 @@
-import { TranslatorReturnInterface } from '../common/TranslatorReturnInterface'
-import { UserNotExists } from '../common/UserNotExists'
-import { TranslatorRun } from '../common/TranslatorRun'
+import { TranslatorReturnInterface } from '../../common/TranslatorReturnInterface'
+import { UserNotExists } from '../../common/UserNotExists'
+import { TranslatorRun } from '../../common/TranslatorRun'
 
 export function TranslatorDelete(json: object): TranslatorReturnInterface {
     // Translators

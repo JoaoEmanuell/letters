@@ -5,7 +5,7 @@ import { GetCookie } from '@/functions/cookies/GetCookie'
 import { RemoveCookie } from '@/functions/cookies/RemoveCookie'
 import { SetCookie } from '@/functions/cookies/SetCookie'
 import { DeleteFetch } from '@/functions/fetch/requests/Delete'
-import { TranslatorDelete } from '@/functions/api/requests/translator/delete/TranslatorDelete'
+import { TranslatorDelete } from '@/functions/api/requests/translator/user/delete/TranslatorDelete'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 
 export default function UserDelete() {
