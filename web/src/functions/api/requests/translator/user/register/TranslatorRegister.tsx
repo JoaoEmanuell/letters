@@ -1,6 +1,6 @@
-import { UsernameAlreadyExistis } from '../common/UsernameAlreadyExistis'
-import { TranslatorReturnInterface } from '../common/TranslatorReturnInterface'
-import { TranslatorRun } from '../common/TranslatorRun'
+import { UsernameAlreadyExistis } from '../../common/UsernameAlreadyExistis'
+import { TranslatorReturnInterface } from '../../common/TranslatorReturnInterface'
+import { TranslatorRun } from '../../common/TranslatorRun'
 
 export function TranslatorRegister(json: object): TranslatorReturnInterface {
     // Translators
