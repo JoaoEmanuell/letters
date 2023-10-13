@@ -39,6 +39,11 @@ export default function SenderLetterPage() {
                     ShowFlashMessage('danger', requestTranslated.message)
                 } else {
                     ShowFlashMessage('success', 'Letter enviada com sucesso!')
+                    // Clear text area
+                    const textArea = document.getElementById(
+                        'text'
+                    ) as HTMLTextAreaElement
+                    textArea.value = ''
                 }
             })
         }
