@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { GetExpire } from './functions/cookies/GetExpire'
 
 export function middleware(request: NextRequest) {
     // User is not authenticated!
@@ -19,5 +18,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/user/logout', '/user/delete'],
+    matcher: ['/user/logout', '/user/delete', '/user/'],
 }
