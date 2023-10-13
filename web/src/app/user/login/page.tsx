@@ -39,7 +39,7 @@ export default function UserLogin() {
                     SetCookie('username', dataInputs['username']) // Username
 
                     SetCookie('flash', 'success+Login realizado com sucesso!') // Flash message
-                    window.location.replace(`/`)
+                    window.location.replace(`/user/`)
                 }
             })
         }
