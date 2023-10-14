@@ -11,6 +11,7 @@ import { PostFetch } from '@/functions/fetch/requests/Post'
 import { TranslatorLogin } from '@/functions/api/requests/translator/user/login/TranslatorLogin'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 import { SetCookie } from '@/functions/cookies/SetCookie'
+import { GetFetch } from '@/functions/fetch/requests/Get'
 
 export default function UserLogin() {
     const fetchLoginUser = async () => {
@@ -35,11 +36,23 @@ export default function UserLogin() {
                     ShowFlashMessage('danger', requestTranslated.message)
                 } else {
                     // Save
-                    SetCookie('userToken', data['token']) // User token
-                    SetCookie('username', dataInputs['username']) // Username
-
-                    SetCookie('flash', 'success+Login realizado com sucesso!') // Flash message
-                    window.location.replace(`/user/`)
+                    // Request the user details
+                    const userToken = data['token']
+                    const userDetailsJson = GetFetch(
+                        `${apiHost}/user/detail/${userToken}`
+                    )
+                    userDetailsJson.then((data) => {
+                        const name = data['name'] as string
+                        const username = data['username'] as string
+                        SetCookie('userToken', userToken) // User token
+                        SetCookie('name', name) // Name
+                        SetCookie('username', username) // Username
+                        SetCookie(
+                            'flash',
+                            'success+Login realizado com sucesso!'
+                        ) // Flash message
+                        window.location.replace(`/user/`)
+                    })
                 }
             })
         }
