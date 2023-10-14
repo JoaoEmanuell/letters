@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import Script from 'next/script'
 
 import { Header } from '@/components/body/Header'
 import { Footer } from '@/components/body/Footer'
@@ -22,7 +23,6 @@ export default function RootLayout({
                     name="viewport"
                     content="width=device-width, initial-scale=1"
                 />
-                <script src="/static/js/bootstrap.min.js" defer></script>
             </head>
             <body className="d-flex flex-column h-100">
                 <Header />
@@ -30,6 +30,7 @@ export default function RootLayout({
                     <FlashMessage />
                 </div>
                 <main className="container mt-4">{children}</main>
+                <Script src="/static/js/bootstrap.bundle.min.js" />
                 <Footer />
             </body>
         </html>
