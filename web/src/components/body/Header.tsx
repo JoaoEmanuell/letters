@@ -1,3 +1,7 @@
+'use client'
+
+import UserHeader from './user/UserDropdownHeader'
+
 export function Header() {
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -30,6 +34,7 @@ export function Header() {
                                 Home
                             </a>
                         </li>
+                        <UserHeader />
                     </ul>
                 </div>
             </div>
