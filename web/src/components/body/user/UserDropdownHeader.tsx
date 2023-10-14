@@ -3,9 +3,9 @@ import dynamic from 'next/dynamic'
 import xss from 'xss'
 
 async function UserDropdownHeader() {
-    const username = GetCookie('username')
+    const name = GetCookie('name')
     // User don't connected
-    if (username === '') {
+    if (name === '') {
         return (
             <li className="nav-item">
                 <a
@@ -27,7 +27,7 @@ async function UserDropdownHeader() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                 >
-                    Olá: &quot;{xss(username)}&quot;
+                    Olá: &quot;{xss(name)}&quot;
                 </a>
                 <ul className="dropdown-menu">
                     <li>
