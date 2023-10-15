@@ -10,25 +10,30 @@ import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
 
 export default function UserDelete() {
     const deleteUser = () => {
-        // Delete from api
-        const apiHost = process.env.API_HOST as string
-        const userToken = GetCookie('userToken')
-        const json = DeleteFetch(`${apiHost}/user/detail/${userToken}`)
-        json.then((data) => {
-            const requestTranslated = TranslatorDelete(data)
-            if (requestTranslated.type == 'danger') {
-                ShowFlashMessage('danger', requestTranslated.message)
-            } else {
-                // Delete cookies
+        const confirm = window.confirm(
+            'Tem certeza que deseja deletar sua conta?'
+        )
+        if (confirm) {
+            // Delete from api
+            const apiHost = process.env.API_HOST as string
+            const userToken = GetCookie('userToken')
+            const json = DeleteFetch(`${apiHost}/user/detail/${userToken}`)
+            json.then((data) => {
+                const requestTranslated = TranslatorDelete(data)
+                if (requestTranslated.type == 'danger') {
+                    ShowFlashMessage('danger', requestTranslated.message)
+                } else {
+                    // Delete cookies
 
-                const cookiesName = ['name', 'username', 'userToken']
-                cookiesName.forEach((cookieName) => {
-                    RemoveCookie(cookieName)
-                })
-                SetCookie('flash', 'success+Conta deletada com sucesso!') // Flash message
-                window.location.replace('/')
-            }
-        })
+                    const cookiesName = ['name', 'username', 'userToken']
+                    cookiesName.forEach((cookieName) => {
+                        RemoveCookie(cookieName)
+                    })
+                    SetCookie('flash', 'success+Conta deletada com sucesso!') // Flash message
+                    window.location.replace('/')
+                }
+            })
+        }
     }
     return (
         <main>
@@ -47,7 +52,7 @@ export default function UserDelete() {
                     >
                         Sim
                     </button>
-                    <a className="btn btn-success ms-1" href="/">
+                    <a className="btn btn-success ms-1" href="/user/">
                         Não
                     </a>
                 </CenterDiv>
