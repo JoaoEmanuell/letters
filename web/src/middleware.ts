@@ -18,5 +18,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/user/logout', '/user/delete', '/user/'],
+    matcher: ['/user/logout', '/user/delete', '/user', '/user/infos'],
 }
