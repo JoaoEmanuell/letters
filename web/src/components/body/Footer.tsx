@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import github from '../../assets/github.svg'
+import { Github } from 'lucide-react'
 
 export function Footer() {
     const date = new Date()
@@ -11,7 +10,7 @@ export function Footer() {
                     <a
                         href="/contact"
                         className="link-info link-offset-2 link-underline link-underline-opacity-0"
-                        target="_blank"
+                        target="_parent"
                     >
                         Contato
                     </a>
@@ -23,12 +22,7 @@ export function Footer() {
                         target="_blank"
                         className="px-2 mb-2"
                     >
-                        <Image
-                            src={github}
-                            alt="github-icon"
-                            width={18}
-                            height={24}
-                        />
+                        <Github color="#000000"></Github>
                     </a>
                 </p>
             </div>
