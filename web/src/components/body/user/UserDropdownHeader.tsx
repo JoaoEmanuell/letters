@@ -47,6 +47,14 @@ async function UserDropdownHeader() {
                         <hr className="dropdown-divider" />
                     </li>
                     <li>
+                        <a className="dropdown-item" href="/user/delete">
+                            Deletar conta
+                        </a>
+                    </li>
+                    <li>
+                        <hr className="dropdown-divider" />
+                    </li>
+                    <li>
                         <a className="dropdown-item" href="/user/logout">
                             Sair
                         </a>
