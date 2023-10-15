@@ -7,8 +7,7 @@ import dynamic from 'next/dynamic'
 import { PropsWithChildren } from 'react'
 import React from 'react'
 import xss from 'xss'
-import Image from 'next/image'
-import trash from '../../../../public/trash.svg'
+import { Trash } from 'lucide-react'
 
 interface UserLettersComponentInterface {}
 
@@ -91,13 +90,8 @@ async function UserLettersComponent(
                     }}
                     className="btn btn-danger"
                 >
-                    <Image
-                        src={trash}
-                        alt="Trash icon"
-                        width={18}
-                        height={18}
-                    />{' '}
-                    Apagar letter
+                    <Trash />
+                    <span className="px-2">Apagar letter</span>
                 </button>
             )
             // append
