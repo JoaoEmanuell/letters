@@ -45,7 +45,7 @@ export default function UserRegister() {
                         'flash',
                         'success+Registro finalizado com sucesso!'
                     ) // Flash message
-                    window.location.replace(`/`)
+                    window.location.replace(`/user/`)
                 }
             })
         }
