@@ -1,6 +1,7 @@
 import { GetCookie } from '@/functions/cookies/GetCookie'
 import dynamic from 'next/dynamic'
 import xss from 'xss'
+import { GetMyLetterLink } from '../GetMyLetterLink'
 
 async function UserDropdownHeader() {
     const name = GetCookie('name')
@@ -34,6 +35,15 @@ async function UserDropdownHeader() {
                         <a className="dropdown-item" href="/user">
                             Letters
                         </a>
+                    </li>
+                    <li>
+                        <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                        <GetMyLetterLink
+                            buttonText="Receber letters"
+                            className="dropdown-item"
+                        />
                     </li>
                     <li>
                         <hr className="dropdown-divider" />
