@@ -16,7 +16,7 @@ from .serializers import LetterSerializer
 from ..models import Letter, User
 from .common import (
     get_object,
-    raise_object_dont_exist,
+    raise_object_not_exist,
     format_return_data,
     staff_get_all,
 )
@@ -136,7 +136,7 @@ class LetterDetailApiView(APIView):
     def get(self, request, letter_token, *args, **kwargs):
         letter_instance = get_object(Letter, {"letter_token": letter_token})
         if not letter_instance:
-            return raise_object_dont_exist(Letter)
+            return raise_object_not_exist(Letter)
 
         serializer = LetterSerializer(letter_instance)
         # Decrypt letter
@@ -154,7 +154,7 @@ class LetterDetailApiView(APIView):
     def delete(self, request, letter_token, *args, **kwargs):
         letter_instance = get_object(Letter, {"letter_token": letter_token})
         if not letter_instance:
-            return raise_object_dont_exist(Letter)
+            return raise_object_not_exist(Letter)
 
         letter_instance.delete()
         remove(f"{LETTER_DIR}/{letter_instance.text_path}.txt")
