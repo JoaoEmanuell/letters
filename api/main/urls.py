@@ -21,6 +21,7 @@ from api.views import (
     UserListApiView,
     UserDetailApiView,
     UserLoginApiView,
+    UsernameApiView,
     LettersListApiView,
     LetterUserListApiView,
     LetterDetailApiView,
@@ -41,6 +42,9 @@ urlpatterns = [
     ## Login
     path("api/user/login", UserLoginApiView.as_view()),
     path("api/user/login/", UserLoginApiView.as_view()),
+    ## Username
+    path("api/user/username/<str:username>", UsernameApiView.as_view()),
+    path("api/user/username/<str:username>/", UsernameApiView.as_view()),
     # Letter route
     ## Letter
     path("api/letter", LettersListApiView.as_view()),
