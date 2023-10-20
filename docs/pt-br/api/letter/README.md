@@ -103,13 +103,17 @@ User é responsável por gerenciar as cartas recebidas pelo usuário.
 
 **POST**
 
-Irá retornar todas as cartas recebidas pelo usuário.
+Irá retornar as cartas recebidas pelo usuário.
+
+Caso não seja o limite de cartas não seja informado, será retornada as 20 primeiras cartas recebidas.
 
 Modelo json: 
 
     {
         "username": "text", // Username from registered user
-        "token": "text" // Token from registered user
+        "token": "text" // Token from registered user,
+        "index-init": "number", // Init to list the letters [optional]
+        "index-end": "number" // End to list the letters [optional]
     }
 
 Exemplo python:
@@ -120,7 +124,9 @@ Exemplo python:
 
     data = {
         "username": "username",
-        "token": "text"
+        "token": "text",
+        "index-init": 0,
+        "index-end": 5
     }
 
     response = post(url, data=data)
@@ -130,7 +136,9 @@ Exemplo javascript (fetch):
     const url = "http://{host}/api/letter/user"
     const data = {
         "username": "username",
-        "token": "text"
+        "token": "text",
+        "index-init": 0,
+        "index-end": 5
     }
 
     const response = fetch(url, { 
