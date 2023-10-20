@@ -38,7 +38,21 @@ class LetterUserListApiView(APIView):
         data = {
             "username": request.data.get("username"),
             "token": request.data.get("token"),
+            "index-init": request.data.get("index-init"),
+            "index-end": request.data.get("index-end"),
         }
+        # Validate the index
+        if (
+            data["index-init"] == None
+            or data["index-end"] == None
+            or type(data["index-init"]) != int
+            or type(data["index-end"]) != int
+        ):
+            data["index-init"] = 0
+            data["index-end"] = 20
+        else:
+            data["index-init"] = int(data["index-init"])
+            data["index-end"] = int(data["index-end"])
 
         user_instance = validate_user(
             {"username": data["username"], "token": data["token"]},
@@ -47,7 +61,9 @@ class LetterUserListApiView(APIView):
         if user_instance:
             return user_instance
 
-        letters = Letter.objects.filter(username=data["username"])
+        letters = Letter.objects.order_by("date").filter(username=data["username"])[
+            data["index-init"] : data["index-end"]
+        ]
         serializer = LetterSerializer(letters, many=True)
         serializer_data = serializer.data
 
