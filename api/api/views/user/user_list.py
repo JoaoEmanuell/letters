@@ -14,6 +14,7 @@ from ..common import (
 )
 
 from main.utils import generate_hash, generate_random_hash
+from main.cache_manager import cache_manager_singleton
 
 
 class UserListApiView(APIView):
@@ -21,6 +22,13 @@ class UserListApiView(APIView):
         return staff_get_all(request, User, UserSerializer)
 
     def post(self, request, *args, **kwargs):  # Register user
+        # Verify if username exists in cache
+        if cache_manager_singleton.get("username", request.data.get("username")):
+            return Response(
+                {"username": ["user with this username already exists."]},
+                status=HTTP_400_BAD_REQUEST,
+            )
+
         token = generate_random_hash()
         data = {
             "name": escape(request.data.get("name")),
@@ -32,6 +40,8 @@ class UserListApiView(APIView):
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            # Save username in cache
+            cache_manager_singleton.set("username", data["username"])
             return Response(
                 {"token": serializer.data["token"]}, status=HTTP_201_CREATED
             )

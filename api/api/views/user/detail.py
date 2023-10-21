@@ -18,6 +18,7 @@ from ..common import (
 )
 
 from main.utils import generate_hash
+from main.cache_manager import cache_manager_singleton
 
 
 class UserDetailApiView(APIView):
@@ -68,6 +69,10 @@ class UserDetailApiView(APIView):
                         letter_instance_serializer.errors, status=HTTP_400_BAD_REQUEST
                     )
             serializer.save()
+            # Update from cache
+
+            cache_manager_singleton.set("username", new_username)
+
             return Response(
                 {"res": "Successfully changed user data"}, status=HTTP_200_OK
             )
@@ -89,5 +94,9 @@ class UserDetailApiView(APIView):
         # Delete user
 
         user_instance.delete()
+
+        # Remove from cache
+
+        cache_manager_singleton.delete("username", user_instance.username)
 
         return Response({"res": "User deleted!"}, status=HTTP_200_OK)
