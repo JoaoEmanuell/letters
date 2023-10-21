@@ -14,10 +14,23 @@ import { ValidateValues } from '@/functions/fetch/inputs/ValidateValues'
 import { PostFetch } from '@/functions/fetch/requests/Post'
 import { TranslatorSend } from '@/functions/api/requests/translator/letters/send/TranslatorSend'
 import { ShowFlashMessage } from '@/functions/flash/ShowFlashMessage'
+import { GetFetch } from '@/functions/fetch/requests/Get'
+import { SetCookie } from '@/functions/cookies/SetCookie'
 
 export default function SenderLetterPage() {
     const params = useParams()
     const username = xss(params.user as string) // sanitize the username
+
+    // Validate if username exists
+
+    const apiHost = process.env.API_HOST as string
+    const response = GetFetch(`${apiHost}/user/username/${username}`)
+    response.then((data) => {
+        if (!data['res']) {
+            SetCookie('flash', 'danger+Usuário não existe!')
+            window.location.replace('/')
+        }
+    })
     const sendLetter = () => {
         const divForm = document.getElementById('form')
         divForm?.classList.remove('was-validated')
