@@ -1,5 +1,5 @@
 import { CenterDiv } from '@/components/body/CenterDiv'
-import { Github } from 'lucide-react'
+import { Github, Mail } from 'lucide-react'
 
 export default function ContactPage() {
     return (
@@ -16,6 +16,16 @@ export default function ContactPage() {
                         >
                             <Github color="#000" />
                             <span className="px-2">Github</span>
+                        </a>
+                    </li>
+                    <li className="list-group-item">
+                        <a
+                            href="mailto:joao.emanuel.dev@gmail.com"
+                            target="_blank"
+                            className="link-info link-offset-2 link-underline link-underline-opacity-0"
+                        >
+                            <Mail color="#000" />
+                            <span className="px-2">Email</span>
                         </a>
                     </li>
                 </ul>
