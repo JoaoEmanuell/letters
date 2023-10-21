@@ -11,6 +11,8 @@
     - [Erros](#erros-2)
   - [Login](#login)
     - [Erros](#erros-3)
+  - [Username](#username)
+    - [GET](#get-1)
 
 
 # User
@@ -262,3 +264,39 @@ Exemplo javascript (fetch):
     }
 
 *Ocorre quando a senha passada é inválida*
+
+## Username
+
+    http://{host}/api/user/username/<username>
+
+### GET
+
+**GET**
+
+Retorna se o usuário está registrado
+
+Exemplo python:
+
+    from requests import get
+
+    response = get("http://{host}/api/user/username/<username>")
+
+Exemplo javascript (fetch):
+
+    const response = fetch("http://{host}/api/user/username/<username>", {
+        method: "GET"
+    }).then(response => response.json());
+
+**Retorno:**
+
+Caso o usuário exista:
+
+    {
+        "res": true
+    }
+
+Caso o usuário não exista:
+
+    {
+        "res": false
+    }

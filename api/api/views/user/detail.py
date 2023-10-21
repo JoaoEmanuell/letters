@@ -2,46 +2,23 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
-    HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
 )
 
 from django.utils.html import escape
 from django.http import HttpRequest
 
-from .serializers import UserSerializer
-from ..models import User
-from .common import (
+from ..serializers import UserSerializer, LetterSerializer
+from ...models import User, Letter
+from ..common import (
     get_object,
-    raise_object_dont_exist,
+    raise_object_not_exist,
     optional_fields,
     format_return_data,
-    staff_get_all,
 )
 
-from main.utils import generate_hash, compare_hash, generate_random_hash
-
-
-class UserListApiView(APIView):
-    def get(self, request, *args, **kwargs):  # Get all users, some staff
-        return staff_get_all(request, User, UserSerializer)
-
-    def post(self, request, *args, **kwargs):  # Register user
-        token = generate_random_hash()
-        data = {
-            "name": escape(request.data.get("name")),
-            "username": escape(request.data.get("username")),
-            "password": generate_hash(request.data.get("password")),
-            "token": token,
-        }
-
-        serializer = UserSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {"token": serializer.data["token"]}, status=HTTP_201_CREATED
-            )
-        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+from main.utils import generate_hash
+from main.cache_manager import cache_manager_singleton
 
 
 class UserDetailApiView(APIView):
@@ -55,7 +32,7 @@ class UserDetailApiView(APIView):
     def get(self, request, token, *args, **kwargs) -> Response:
         user_instance = get_object(User, {"token": token})
         if not user_instance:
-            return raise_object_dont_exist(User)
+            return raise_object_not_exist(User)
 
         serializer = UserSerializer(user_instance)
         data = format_return_data(serializer.data, exclude_fields=["token", "password"])
@@ -64,7 +41,7 @@ class UserDetailApiView(APIView):
     def put(self, request, token, *args, **kwargs) -> Response:
         user_instance = get_object(User, {"token": token})
         if not user_instance:
-            return raise_object_dont_exist(User)
+            return raise_object_not_exist(User)
 
         data = optional_fields(
             user_instance, request.data, ["name", "username", "password"]
@@ -76,16 +53,36 @@ class UserDetailApiView(APIView):
         serializer = UserSerializer(instance=user_instance, data=data, partial=True)
 
         if serializer.is_valid():
+            # Change the username in letters
+            original_username = user_instance.username
+            user_letters = Letter.objects.filter(username=original_username)
+            new_username = escape(data["username"])
+            for _, instance in enumerate(user_letters):
+                instance.username = new_username
+                letter_instance_serializer = LetterSerializer(
+                    data={"username": new_username}
+                )
+                if letter_instance_serializer.is_valid():
+                    instance.save()
+                else:
+                    return Response(
+                        letter_instance_serializer.errors, status=HTTP_400_BAD_REQUEST
+                    )
             serializer.save()
+            # Update from cache
+
+            cache_manager_singleton.set("username", new_username)
+
             return Response(
                 {"res": "Successfully changed user data"}, status=HTTP_200_OK
             )
+        # Send erros to front
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def delete(self, request: HttpRequest, token, *args, **kwargs) -> Response:
         user_instance = get_object(User, {"token": token})
         if not user_instance:
-            return raise_object_dont_exist(User)
+            return raise_object_not_exist(User)
 
         # Delete letters
         from requests import delete
@@ -98,22 +95,8 @@ class UserDetailApiView(APIView):
 
         user_instance.delete()
 
+        # Remove from cache
+
+        cache_manager_singleton.delete("username", user_instance.username)
+
         return Response({"res": "User deleted!"}, status=HTTP_200_OK)
-
-
-class UserLoginApiView(APIView):
-    def post(self, request, *args, **kwargs) -> Response:
-        data = {
-            "username": request.data.get("username"),
-            "password": request.data.get("password"),
-        }
-
-        user_instance = get_object(User, {"username": data["username"]})
-        if not user_instance:
-            return raise_object_dont_exist(User)
-
-        # Validate password
-        if compare_hash(data["password"], user_instance.password):
-            return Response({"token": user_instance.token}, status=HTTP_200_OK)
-
-        return Response({"res": "Invalid password"}, status=HTTP_400_BAD_REQUEST)

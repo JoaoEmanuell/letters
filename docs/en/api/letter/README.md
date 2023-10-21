@@ -1,3 +1,20 @@
+- [letter](#letter)
+  - [Methods allowed](#methods-allowed)
+  - [Index](#index)
+    - [Record](#record)
+      - [Errors](#errors)
+  - [User](#user)
+    - [POST](#post)
+      - [Errors](#errors-1)
+    - [Delete](#delete)
+      - [Errors](#errors-2)
+  - [Detail](#detail)
+    - [GET](#get)
+      - [Errors](#errors-3)
+    - [DELETE](#delete-1)
+      - [Errors](#errors-4)
+
+
 # letter
 
 Letter is the API route responsible for managing operations related to letters.
@@ -86,13 +103,17 @@ User is responsible for managing the letters received by the user.
 
 **POST**
 
-Will return all letters received by the user.
+Will return letters received by the user.
+
+If the letter limit is not informed, the first 20 letters received will be returned.
 
 json template:
 
     {
         "username": "text", // Username from registered user
-        "token": "text" // Token from registered user
+        "token": "text" // Token from registered user,
+        "index-init": "number", // Init to list the letters [optional]
+        "index-end": "number" // End to list the letters [optional]
     }
 
 Python example:
@@ -103,7 +124,9 @@ Python example:
 
     data = {
         "username": "username",
-        "token": "text"
+        "token": "text",
+        "index-init": 0,
+        "index-end": 5
     }
 
     response = post(url, data=data)
@@ -113,7 +136,9 @@ Example javascript (fetch):
     const url = "http://{host}/api/letter/user"
     const data = {
         "username": "username",
-        "token": "text"
+        "token": "text",
+        "index-init": 0,
+        "index-end": 5
     }
 
     const response = fetch(url, { 

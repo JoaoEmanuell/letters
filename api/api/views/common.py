@@ -28,7 +28,7 @@ def get_object(model: Model, data: dict) -> Union[Model, None]:
         return None
 
 
-def raise_object_dont_exist(model: Model) -> Response:
+def raise_object_not_exist(model: Model) -> Response:
     """Return a response if object don't exists
 
     Args:
