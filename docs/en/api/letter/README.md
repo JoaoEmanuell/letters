@@ -113,8 +113,11 @@ json template:
         "username": "text", // Username from registered user
         "token": "text" // Token from registered user,
         "index-init": "number", // Init to list the letters [optional]
-        "index-end": "number" // End to list the letters [optional]
+        "index-end": "number", // End to list the letters [optional]
+        "index-all": "boolean" // List all letters [optional]
     }
+
+**Note:** If the *"index-all"* parameter is set to *true*, the api will return all of the user's letters.
 
 Python example:
 
@@ -127,6 +130,16 @@ Python example:
         "token": "text",
         "index-init": 0,
         "index-end": 5
+    }
+
+    response = post(url, data=data)
+
+    # All
+
+    data = {
+        "username": "username",
+        "token": "text",
+        "index-all": true
     }
 
     response = post(url, data=data)
@@ -148,6 +161,23 @@ Example javascript (fetch):
             "Content-Type": "application/json"
         }
     }).then(response => response.json());
+
+    // All
+
+    data = {
+        "username": "username",
+        "token": "text",
+        "index-all": true
+    }
+
+    const response = fetch(url, { 
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { 
+            "Content-Type": "application/json"
+        }
+    }).then(response => response.json());
+
 
 **RETURN**
 
