@@ -40,6 +40,7 @@ class LetterUserListApiView(APIView):
             "token": request.data.get("token"),
             "index-init": request.data.get("index-init"),
             "index-end": request.data.get("index-end"),
+            "index-all": request.data.get("index-all"),
         }
         # Validate the index
         if (
@@ -61,9 +62,14 @@ class LetterUserListApiView(APIView):
         if user_instance:
             return user_instance
 
-        letters = Letter.objects.order_by("date").filter(username=data["username"])[
-            data["index-init"] : data["index-end"]
-        ]
+        if not data["index-all"]:
+            letters = Letter.objects.order_by("date").filter(username=data["username"])[
+                data["index-init"] : data["index-end"]
+            ]
+        else:
+            letters = Letter.objects.order_by("date").filter(
+                username=data["username"]
+            )  # Index all user letters
         serializer = LetterSerializer(letters, many=True)
         serializer_data = serializer.data
 
