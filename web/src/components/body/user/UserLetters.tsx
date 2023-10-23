@@ -45,6 +45,7 @@ async function UserLettersComponent(
     const userLetters = PostFetch(`${apiHost}/letter/user/`, {
         username: username,
         token: userToken,
+        'index-all': true,
     })
     var userLettersContent: {
         date: Date
