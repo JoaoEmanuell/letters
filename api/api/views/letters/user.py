@@ -20,6 +20,7 @@ from main.utils import (
     decrypt_text,
 )
 from main.settings import BASE_DIR
+from main.cache_manager import cache_manager_singleton
 
 LETTER_DIR = f"{BASE_DIR}/database/letters"
 
@@ -62,6 +63,11 @@ class LetterUserListApiView(APIView):
         if user_instance:
             return user_instance
 
+        # Get on the cache
+        cache = cache_manager_singleton.get("letters_user", data["token"])
+        if cache:
+            return Response(cache, status=HTTP_200_OK)
+
         if not data["index-all"]:
             letters = Letter.objects.order_by("date").filter(username=data["username"])[
                 data["index-init"] : data["index-end"]
@@ -83,12 +89,16 @@ class LetterUserListApiView(APIView):
                     text = ""
             serializer_data[i]["text"] = text
 
-        data = format_return_data(
+        return_data = format_return_data(
             list(serializer_data),
             include_fields=["date", "sender", "text", "letter_token"],
         )
+        # Set on the cache
+        cache_manager_singleton.set(
+            "letters_user", {"user_token": data["token"], "letters": return_data}
+        )
 
-        return Response(data, status=HTTP_200_OK)
+        return Response(return_data, status=HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         data = {
@@ -110,4 +120,9 @@ class LetterUserListApiView(APIView):
             # Delete from database
 
             letters.delete()
+
+            # Remove from cache
+
+            cache_manager_singleton.delete("letters_user", data["token"])
+
             return Response({"res": "Letters deleted!"}, status=HTTP_200_OK)
