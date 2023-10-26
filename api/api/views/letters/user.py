@@ -120,4 +120,9 @@ class LetterUserListApiView(APIView):
             # Delete from database
 
             letters.delete()
+
+            # Remove from cache
+
+            cache_manager_singleton.delete("letters_user", data["token"])
+
             return Response({"res": "Letters deleted!"}, status=HTTP_200_OK)
