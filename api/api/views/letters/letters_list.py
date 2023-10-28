@@ -45,7 +45,7 @@ class LettersListApiView(APIView):
         return staff_get_all(request, Letter, LetterSerializer)
 
     def post(self, request, *args, **kwargs):
-        text_path = generate_random_hash()  # path to save letter
+        text_path = generate_random_hash(fast=True)  # path to save letter
         data = {
             "username": request.data.get("username"),
             "date": request.data.get("date"),
