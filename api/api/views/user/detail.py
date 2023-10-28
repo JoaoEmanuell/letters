@@ -55,19 +55,14 @@ class UserDetailApiView(APIView):
         if serializer.is_valid():
             # Change the username in letters
             original_username = user_instance.username
-            user_letters = Letter.objects.filter(username=original_username)
             new_username = escape(data["username"])
-            for _, instance in enumerate(user_letters):
-                instance.username = new_username
-                letter_instance_serializer = LetterSerializer(
-                    data={"username": new_username}
-                )
-                if letter_instance_serializer.is_valid():
+            if original_username != new_username:
+                user_letters = Letter.objects.filter(username=original_username)
+                for instance in user_letters:
+                    instance.username = new_username
                     instance.save()
-                else:
-                    return Response(
-                        letter_instance_serializer.errors, status=HTTP_400_BAD_REQUEST
-                    )
+
+            # Save user
             serializer.save()
             # Update from cache
 

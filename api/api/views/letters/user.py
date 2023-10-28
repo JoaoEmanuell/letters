@@ -56,17 +56,17 @@ class LetterUserListApiView(APIView):
             data["index-init"] = int(data["index-init"])
             data["index-end"] = int(data["index-end"])
 
+        # Get on the cache
+        cache = cache_manager_singleton.get("letters_user", data["token"])
+        if cache:
+            return Response(cache, status=HTTP_200_OK)
+
         user_instance = validate_user(
             {"username": data["username"], "token": data["token"]},
             "Username or token is not valid",
         )
         if user_instance:
             return user_instance
-
-        # Get on the cache
-        cache = cache_manager_singleton.get("letters_user", data["token"])
-        if cache:
-            return Response(cache, status=HTTP_200_OK)
 
         if not data["index-all"]:
             letters = Letter.objects.order_by("date").filter(username=data["username"])[
