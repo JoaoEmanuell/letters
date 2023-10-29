@@ -1,2 +1,2 @@
-from .user import UsernameCache
+from .user import UsernameCache, DetailUserCache
 from .letters import UserLettersCache

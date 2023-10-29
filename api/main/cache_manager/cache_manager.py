@@ -1,6 +1,6 @@
 from typing import Any
 from .interfaces import CacheManagerInterface, CacheInterface
-from sys import getsizeof
+from pympler.asizeof import asizeof
 
 
 class CacheManager(CacheManagerInterface):
@@ -12,7 +12,7 @@ class CacheManager(CacheManagerInterface):
         self.__CACHE_MEMORY_DIVIDE = self.__MAX_MEMORY_CACHE / len(self.__caches_class)
 
     def private__verify_cache_size(self, cache_name: str) -> bool:
-        if getsizeof(self.__caches_class[cache_name]) >= self.__CACHE_MEMORY_DIVIDE:
+        if asizeof(self.__caches_class[cache_name]) >= self.__CACHE_MEMORY_DIVIDE:
             print(f"{cache_name} clear cache")
             self.__caches_class[cache_name].clear_cache()
 

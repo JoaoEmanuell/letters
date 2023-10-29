@@ -20,13 +20,20 @@ from main.utils import (
     generate_random_hash,
 )
 from main.settings import BASE_DIR
+from main.cache_manager import cache_manager_singleton
 
 LETTER_DIR = f"{BASE_DIR}/database/letters"
 
 
 def validate_user(data: dict, msg: str) -> Union[Response, None]:
     try:
-        user = User.objects.get(**data)
+        # Get on cache
+        if cache_manager_singleton.get("username", data["username"]):
+            return None
+        else:
+            user = User.objects.get(**data)
+            # Save on cache
+            cache_manager_singleton.set("username", user.username)
     except User.DoesNotExist:
         return Response({"detail": msg}, status=HTTP_400_BAD_REQUEST)
     else:
@@ -38,7 +45,7 @@ class LettersListApiView(APIView):
         return staff_get_all(request, Letter, LetterSerializer)
 
     def post(self, request, *args, **kwargs):
-        text_path = generate_random_hash()  # path to save letter
+        text_path = generate_random_hash(fast=True)  # path to save letter
         data = {
             "username": request.data.get("username"),
             "date": request.data.get("date"),
