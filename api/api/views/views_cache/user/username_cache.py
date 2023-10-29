@@ -19,8 +19,13 @@ class UsernameCache(CacheInterface):
 
     def delete(self, value: Any) -> bool:
         new_cache = [*self.__cache]
-        new_cache.remove(value)
+        try:
+            new_cache.remove(value)
+        except ValueError:
+            pass
         self.__cache = (*new_cache,)
+        del new_cache
+        return True
 
     def clear_cache(self) -> bool:
         self.__cache = ()

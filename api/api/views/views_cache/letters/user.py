@@ -65,9 +65,12 @@ class UserLettersCache(CacheInterface):
 
     def delete(self, value: Any) -> bool:
         new_cache = [*self.__cache]
-        user_index = new_cache.index(value)
-        new_cache.pop(user_index)
-        new_cache.pop(user_index + 1)
+        try:
+            user_index = new_cache.index(value)
+            new_cache.pop(user_index)
+            new_cache.pop(user_index + 1)
+        except (IndexError, ValueError):
+            pass
         self.__cache = (*new_cache,)
         del new_cache
         self.private__delete_user_cache_expire(value)
@@ -92,10 +95,10 @@ class UserLettersCache(CacheInterface):
         letters: list[dict[str, str]] = []
         for letter in letters_tuple:
             data = {
-                "date": letter[0],
-                "sender": letter[1],
-                "text": letter[2],
-                "letter_token": letter[3],
+                "date": letter[0].encode(),
+                "sender": letter[1].encode(),
+                "text": letter[2].encode(),
+                "letter_token": letter[3].encode(),
             }
             letters.append(data)
 

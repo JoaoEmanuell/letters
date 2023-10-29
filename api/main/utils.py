@@ -16,6 +16,12 @@ def generate_hash(value: str) -> str:
     return hashed.decode(ENCODE)
 
 
+def generate_fast_hash(value: str) -> str:
+    global ENCODE
+    hashed = hashpw(bytes(value, encoding=ENCODE), gensalt(4))
+    return hashed.decode(ENCODE)
+
+
 def compare_hash(value: str, hash: str) -> bool:
     global ENCODE
     if type(hash) != bytes:
@@ -23,9 +29,11 @@ def compare_hash(value: str, hash: str) -> bool:
     return checkpw(bytes(value, encoding=ENCODE), hash)
 
 
-def generate_random_hash() -> str:
-    global ENCODE
-    hash = generate_hash(f"{randint(1, 100000000)}{datetime.today()}")
+def generate_random_hash(fast: bool = False) -> str:
+    if fast:
+        hash = generate_fast_hash(f"{randint(1, 1000)}{datetime.now()}")
+    else:
+        hash = generate_hash(f"{randint(1, 100000000)}{datetime.now()}")
     hash = hash.replace("/", "").replace(".", "")
     return hash
 
