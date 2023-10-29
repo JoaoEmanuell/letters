@@ -4,37 +4,22 @@ RUN pip install --upgrade pip
 
 # Install packegs
 
-RUN apk add bash shadow libpq-dev gcc
+RUN apk add libpq-dev gcc
 
-# Create no root user
-
-ENV NO_ROOT_USER=python
-ENV NO_ROOT_USER_PASSWORD=python
-
-RUN useradd -m $NO_ROOT_USER
-
-RUN echo "$NO_ROOT_USER:$NO_ROOT_USER_PASSWORD" | chpasswd
-
-# Set user and workdir
-
-USER $NO_ROOT_USER
-
-WORKDIR /usr/src/app
-
-# Config no root env
-
-ENV HOME="/home/python"
-
-ENV PATH="$PATH:$HOME/.local/bin"
+WORKDIR /usr/src/app/
 
 # requirements
 
-COPY requirements.txt .
+COPY . .
 
 RUN pip install -r requirements.txt
+
+# Setup
+
+RUN cd main && python setup.py
 
 # Ports and run
 
 EXPOSE 8000
 
-CMD tail -f /dev/null
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
