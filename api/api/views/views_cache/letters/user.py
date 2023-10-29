@@ -171,7 +171,10 @@ class UserLettersCache(CacheInterface):
             user_token (str): user token
         """
         new_cache = [*self.__cache]
-        user_index = new_cache.index(user_token)
-        new_cache.pop(user_index)
-        new_cache.pop(user_index + 1)
+        try:
+            user_index = new_cache.index(user_token)
+            new_cache.pop(user_index)
+            new_cache.pop(user_index + 1)
+        except (ValueError, IndexError):
+            pass
         self.__cache_expire = (*new_cache,)

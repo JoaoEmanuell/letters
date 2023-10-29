@@ -7,6 +7,10 @@ class DetailUserCache(CacheInterface):
         self.__cache = ()
 
     def get(self, value: Any) -> Any | None:
+        """
+        Args:
+            value (str): user token
+        """
         if value in self.__cache:
             user_index = self.__cache.index(value)
             return self.private__transform_user_tuple_in_dict(
@@ -15,6 +19,11 @@ class DetailUserCache(CacheInterface):
         return None
 
     def set(self, value: Any) -> bool:
+        """
+
+        Args:
+            value (dict): {user_token: "token", user_data: list[dict]}
+        """
         user_token = value["user_token"]
         if not self.get(value):
             data = self.private__transform_user_dict_in_tuple(value["user_data"])
@@ -37,6 +46,10 @@ class DetailUserCache(CacheInterface):
         return False
 
     def delete(self, value: Any) -> bool:
+        """
+        Args:
+            value (str): user token
+        """
         new_cache = [*self.__cache]
         try:
             user_index = new_cache.index(value)
