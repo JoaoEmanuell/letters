@@ -46,5 +46,8 @@ class LetterDetailApiView(APIView):
             return raise_object_not_exist(Letter)
 
         letter_instance.delete()
-        remove(f"{LETTER_DIR}/{letter_instance.text_path}.txt")
+        try:
+            remove(f"{LETTER_DIR}/{letter_instance.text_path}.txt")
+        except FileNotFoundError:
+            pass
         return Response({"res": "Letter deleted!"}, status=HTTP_200_OK)
