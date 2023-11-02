@@ -118,7 +118,10 @@ class LetterUserListApiView(APIView):
             # Remove letter from server
 
             for letter in letters:
-                remove(f"{LETTER_DIR}/{letter.text_path}.txt")
+                try:
+                    remove(f"{LETTER_DIR}/{letter.text_path}.txt")
+                except FileNotFoundError:
+                    pass
 
             # Delete from database
 
