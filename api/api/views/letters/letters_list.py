@@ -51,7 +51,7 @@ class LettersListApiView(APIView):
             "date": request.data.get("date"),
             "sender": escape(request.data.get("sender")),
             "text_path": text_path,
-            "letter_token": generate_random_hash(),
+            "letter_token": generate_random_hash(fast=True),
         }
         # Validate user username
         user = validate_user({"username": data["username"]}, "Username is not valid")
