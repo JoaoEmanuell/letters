@@ -1,10 +1,6 @@
 FROM python:3.11-alpine
 
-RUN pip install --upgrade pip
-
-# Install packegs
-
-RUN apk add libpq-dev gcc
+RUN pip install --upgrade pip --no-cache
 
 WORKDIR /usr/src/app/
 
@@ -12,7 +8,7 @@ WORKDIR /usr/src/app/
 
 COPY . .
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --no-cache
 
 # Setup
 
