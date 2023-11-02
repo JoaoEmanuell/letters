@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "our_secret_here"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 hosts = getenv("ALLOWED_HOSTS")
 hosts = hosts.rsplit(",")  # Transform in list

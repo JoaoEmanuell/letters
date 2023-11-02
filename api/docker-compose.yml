@@ -1,11 +1,10 @@
 version: '3.7'
 
 services:
-    api:
+    letters-api-production:
         build: .
         volumes:
-            - .:/usr/src/app
+            - ./database/:/usr/src/app/database/
         ports:
             - '8000:8000'
         restart: always
-        command: tail -F anything

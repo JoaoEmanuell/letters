@@ -82,11 +82,14 @@ class LetterUserListApiView(APIView):
         # Decrypt letter
 
         for i, letter in enumerate(letters):
-            with open(f"{LETTER_DIR}/{letter.text_path}.txt", "r") as file:
-                try:
-                    text = decrypt_text(file.read())
-                except InvalidToken:  # If letter is empty
-                    text = ""
+            try:
+                with open(f"{LETTER_DIR}/{letter.text_path}.txt", "r") as file:
+                    try:
+                        text = decrypt_text(file.read())
+                    except InvalidToken:  # If letter is empty
+                        text = ""
+            except FileNotFoundError:
+                text = ""
             serializer_data[i]["text"] = text
 
         return_data = format_return_data(
@@ -115,7 +118,10 @@ class LetterUserListApiView(APIView):
             # Remove letter from server
 
             for letter in letters:
-                remove(f"{LETTER_DIR}/{letter.text_path}.txt")
+                try:
+                    remove(f"{LETTER_DIR}/{letter.text_path}.txt")
+                except FileNotFoundError:
+                    pass
 
             # Delete from database
 

@@ -100,7 +100,7 @@ def create_database() -> None:
 
     global BASE_DIR
 
-    path_to_database = f"{BASE_DIR}/database/"
+    path_to_database = f"{BASE_DIR}/database"
     # Create database dir
     if not exists(path_to_database):
         mkdir(path_to_database)
