@@ -2,9 +2,11 @@ FROM python:3.11-alpine
 
 RUN pip install --upgrade pip
 
-# Create no root user
+# Install packegs
 
-RUN apk add bash && apk add shadow
+RUN apk add bash shadow libpq-dev gcc
+
+# Create no root user
 
 ENV NO_ROOT_USER=python
 ENV NO_ROOT_USER_PASSWORD=python

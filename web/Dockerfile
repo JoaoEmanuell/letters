@@ -1,11 +1,23 @@
 FROM node:18.17.0-alpine
 
-RUN apk add bash
+RUN mkdir -p /home/node/app
 
 WORKDIR /home/node/app
 
-EXPOSE 8080
+COPY . .
+
+# Install node modules
+
+RUN npm install -y --omit=dev
+
+# Build server
+
+RUN npm run build
+
+# Run the server
 
 USER node
 
-CMD tail -f /dev/null
+EXPOSE 8080
+
+CMD ["npm", "start", "--", "-p", "8080"]

@@ -1,10 +1,8 @@
 version: '3.7'
 
 services:
-  web:
-      build: .
-      ports:
-          - '8080:8080'
-      volumes:
-          - .:/home/node/app
-      restart: always
+    letters-web-production:
+        build: .
+        ports:
+            - '8080:8080'
+        restart: always
