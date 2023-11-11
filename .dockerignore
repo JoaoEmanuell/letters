@@ -37,3 +37,4 @@ next-env.d.ts
 # local
 .prettierignore
 .prettierrc.json
+.git/
